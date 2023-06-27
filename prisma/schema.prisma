@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Arcade {
+  id         Int          @id @default(autoincrement())
+  name       String
+  location   String
+  rating     Int
+  ArcadeGame ArcadeGame[]
+}
+
+model Game {
+  id         Int          @id @default(autoincrement())
+  name       String
+  brand      String
+  ArcadeGame ArcadeGame[]
+}
+
+model ArcadeGame {
+  id       Int    @id @default(autoincrement())
+  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
+  ArcadeId Int
+  Game     Game   @relation(fields: [GameId], references: [id])
+  GameId   Int
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  username String
+  password String
+}
