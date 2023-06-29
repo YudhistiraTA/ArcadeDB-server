@@ -13,6 +13,8 @@ model Arcade {
   location   String
   rating     Int
   ArcadeGame ArcadeGame[]
+  Bookmark   Bookmark[]
+  Session    Session[]
 }
 
 model Game {
@@ -31,8 +33,53 @@ model ArcadeGame {
 }
 
 model User {
+  id           Int          @id @default(autoincrement())
+  email        String       @unique
+  username     String
+  password     String
+  Bookmark     Bookmark[]
+  Session      Session[]
+  userSender   Inbox[]      @relation("UserSender")
+  userReciever Inbox[]      @relation("UserReciever")
+  userFollowed UserFollow[] @relation("UserFollowed")
+  userFollower UserFollow[] @relation("UserFollower")
+}
+
+model Brand {
   id       Int    @id @default(autoincrement())
-  email    String @unique
-  username String
-  password String
+  name     String
+  imageUrl String
+}
+
+model Bookmark {
+  id       Int    @id @default(autoincrement())
+  User     User   @relation(fields: [UserId], references: [id])
+  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
+  UserId   Int
+  ArcadeId Int
+}
+
+model Session {
+  id       Int    @id @default(autoincrement())
+  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
+  User     User   @relation(fields: [UserId], references: [id])
+  date     Int
+  ArcadeId Int
+  UserId   Int
+}
+
+model UserFollow {
+  id         Int  @id @default(autoincrement())
+  Followed   User @relation("UserFollowed", fields: [FollowedId], references: [id])
+  Follower   User @relation("UserFollower", fields: [FollowerId], references: [id])
+  FollowedId Int  @unique
+  FollowerId Int  @unique
+}
+
+model Inbox {
+  id         Int  @id @default(autoincrement())
+  Sender     User @relation("UserSender", fields: [SenderId], references: [id])
+  Receiver   User @relation("UserReciever", fields: [ReceiverId], references: [id])
+  SenderId   Int  @unique
+  ReceiverId Int  @unique
 }
