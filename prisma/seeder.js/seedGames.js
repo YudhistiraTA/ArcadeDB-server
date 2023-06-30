@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { games } from "../db/games";
+const { PrismaClient } = require('@prisma/client')
+const  games  = require("../db/games")
 const prisma = new PrismaClient();
 
 async function main() {

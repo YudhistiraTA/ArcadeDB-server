@@ -1,20 +1,20 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
-async function main() {
-  for (let product of products) {
-    await prisma.product.create({
-      data: product,
-    });
-  }
-}
+// async function main() {
+//   for (let product of products) {
+//     await prisma.product.create({
+//       data: product,
+//     });
+//   }
+// }
 
-main()
-  .catch((e) => {
-    console.log(e);
-    process.exit(1);
-  })
-  .finally(() => {
-    prisma.$disconnect();
-  });
+// main()
+//   .catch((e) => {
+//     console.log(e);
+//     process.exit(1);
+//   })
+//   .finally(() => {
+//     prisma.$disconnect();
+//   });

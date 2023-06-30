@@ -1,5 +1,4 @@
-export const games = {
+module.exports =  games = {
   name: "fighter",
   brand: "Timezone",
-  arcadeGame: 1,
 };

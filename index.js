@@ -22,17 +22,7 @@ app.listen(port, () => {
 
       const user = await User.findAll({
         attributes: {
-          exclude: [
-            "id",
-            "password",
-            "firstName",
-            "lastName",
-            "gender",
-            "age",
-            "subscriptionType",
-            "createdAt",
-            "updatedAt",
-          ],
+          exclude: ["id", "username", "password", "createdAt", "updatedAt"],
         },
       });
       user.forEach((element) => {

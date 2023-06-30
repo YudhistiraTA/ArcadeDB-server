@@ -1,6 +1,9 @@
 {
   "name": "arcadedb-server",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "node prisma/seeder.js/seedGames.js"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
