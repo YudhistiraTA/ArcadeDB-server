@@ -7,7 +7,10 @@ async function main() {
 			username: "master",
 			password:
 				"$2b$10$ujkshISG1sWH8AkMnX8z.ei4Rk2ljLq1ivuK5GkSjrUz2ncpwOWpu",
-			premium: true
+			premium: true,
+			subscriptionDeadline: new Date(
+				new Date().setDate(new Date().getDate() + 30) // 30 days from now
+			)
 		}
 	});
 	const Aeon_BSD = await prisma.arcade.upsert({
@@ -52,7 +55,7 @@ async function main() {
 			},
 			Bookmark: {
 				create: {
-					UserId: masterUser.id,
+					UserId: masterUser.id
 				}
 			},
 			Session: {

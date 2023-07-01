@@ -14,6 +14,7 @@ CREATE TABLE `Arcade` (
     `lat` DOUBLE NOT NULL,
     `lng` DOUBLE NOT NULL,
     `rating` INTEGER NOT NULL,
+    `ratingCount` INTEGER NOT NULL,
     `BrandId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -45,6 +46,7 @@ CREATE TABLE `User` (
     `username` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `premium` BOOLEAN NOT NULL DEFAULT false,
+    `subscriptionDeadline` DATETIME(3) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)

@@ -9,5 +9,6 @@ router.post("/users/register", UserController.create);
 router.post("/users/login", UserController.login);
 
 router.get("/main", ArcadeController.mainPage);
+router.get("/detail/:id", ArcadeController.detailPage);
 
 module.exports = router;
