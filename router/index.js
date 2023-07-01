@@ -1,6 +1,7 @@
 const express = require("express");
 const UserController = require("../controllers/UserController");
 const ArcadeController = require("../controllers/ArcadeController");
+const GameController = require("../controllers/GameController");
 const router = express.Router();
 
 router.get("/users", UserController.findAll);
@@ -10,5 +11,6 @@ router.post("/users/login", UserController.login);
 
 router.get("/main", ArcadeController.mainPage);
 router.get("/detail/:id", ArcadeController.detailPage);
+router.get("/games", GameController.findAll);
 
 module.exports = router;

@@ -36,4 +36,11 @@ module.exports = class ArcadeController {
 			next(error);
 		}
 	}
+	static async createArcade(req, res, next) {
+		try {
+			const {name, lat, lng, logo, games} = req.body;
+		} catch (error) {
+			next(error);
+		}
+	}
 };
