@@ -66,7 +66,42 @@ async function main() {
 			}
 		}
 	});
-	console.log({ Aeon_BSD });
+	const games = await prisma.game.createMany({
+		data: [
+			{
+				name: "Taiko no Tatsujin",
+				logoUrl:
+					"https://upload.wikimedia.org/wikipedia/en/3/3f/Taiko_no_Tatsujin_English_logo.png"
+			},
+			{
+				name: "DrumMania",
+				logoUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwu656mAj-PuMxeWE0Z9ZPqhc_K3fqLKOFGk-ammkBS4-m6Ljknr8eqVv2zeu19o8rwDM&usqp=CAU"
+			},
+			{
+				name: "Pump It Up",
+				logoUrl:
+					"https://i.pinimg.com/originals/dd/cf/8d/ddcf8d13bd081dfc1cbdf2eda20113c4.png"
+			},
+			{
+				name: "Beatmania",
+				logoUrl:
+					"https://s3.amazonaws.com/gt7sp-prod/decal/16/36/90/6061919871825903616_1.png"
+			}
+		]
+	});
+	const brands = await prisma.brand.createMany({
+		data: [
+			{
+				name: "Amazone",
+				imageUrl: "https://pbs.twimg.com/profile_images/960431492160618496/akedMKBR_400x400.jpg"
+			},
+			{
+				name: "Fun World",
+				imageUrl: "https://lsurecreation.files.wordpress.com/2018/01/funworld.jpg"
+			}
+		]
+	})
 }
 main()
 	.then(async () => {
