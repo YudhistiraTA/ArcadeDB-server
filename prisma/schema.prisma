@@ -45,17 +45,18 @@ model ArcadeGame {
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  email        String       @unique
-  username     String
-  password     String
-  premium      Boolean      @default(false)
-  Bookmark     Bookmark[]
-  Session      Session[]
-  userSender   Inbox[]      @relation("UserSender")
-  userReciever Inbox[]      @relation("UserReciever")
-  userFollowed UserFollow[] @relation("UserFollowed")
-  userFollower UserFollow[] @relation("UserFollower")
+  id                   Int          @id @default(autoincrement())
+  email                String       @unique
+  username             String
+  password             String
+  premium              Boolean      @default(false)
+  subscriptionDeadline DateTime?
+  Bookmark             Bookmark[]
+  Session              Session[]
+  userSender           Inbox[]      @relation("UserSender")
+  userReciever         Inbox[]      @relation("UserReciever")
+  userFollowed         UserFollow[] @relation("UserFollowed")
+  userFollower         UserFollow[] @relation("UserFollower")
 }
 
 model Bookmark {
