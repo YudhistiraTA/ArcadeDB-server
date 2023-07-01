@@ -21,7 +21,7 @@ module.exports = class ArcadeController {
 					arcadesWithin10Km.push(arcade);
 				}
 			});
-			arcadesWithin10Km.sort((a, b) => a.distance - b.distance);
+			arcadesWithin10Km.sort((a, b) => a.rating - b.rating);
 			res.status(200).json(arcadesWithin10Km);
 		} catch (error) {
 			next(error);
