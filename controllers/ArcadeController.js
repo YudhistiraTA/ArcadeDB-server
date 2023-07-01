@@ -6,18 +6,23 @@ module.exports = class ArcadeController {
 		try {
 			const userLat = parseFloat(req.query.lat);
 			const userLng = parseFloat(req.query.lng);
-			const arcades = await Arcade.findWithBrand();
-			arcades.forEach((arcade) => {
+			const allArcades = await Arcade.findWithBrand();
+			let arcadesWithin10Km = [];
+
+			allArcades.forEach((arcade) => {
 				const distance = haversineDistance(
 					arcade.lat,
 					arcade.lng,
 					userLat,
 					userLng
 				);
-				arcade.distance = distance;
+				if (distance <= 10) {
+					arcade.distance = distance;
+					arcadesWithin10Km.push(arcade);
+				}
 			});
-			arcades.sort((a, b) => a.rating - b.rating);
-			res.status(200).json(arcades.slice(0, 5));
+			arcadesWithin10Km.sort((a, b) => a.distance - b.distance);
+			res.status(200).json(arcadesWithin10Km);
 		} catch (error) {
 			next(error);
 		}
