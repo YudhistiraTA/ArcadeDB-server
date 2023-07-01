@@ -22,7 +22,7 @@ module.exports = class ArcadeController {
 				}
 			});
 			arcadesWithin10Km.sort((a, b) => a.rating - b.rating);
-			res.status(200).json(arcadesWithin10Km);
+			res.status(200).json(arcadesWithin10Km.slice(0, 5));
 		} catch (error) {
 			next(error);
 		}
