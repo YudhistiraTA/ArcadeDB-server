@@ -1,6 +1,6 @@
 const { Game } = require("../models");
 
-module.exports = class gameController {
+module.exports = class GameController {
   static async findAllGame(req, res, next) {
     try {
       const data = await Game.findAll();
