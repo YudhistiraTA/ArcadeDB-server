@@ -1,8 +1,8 @@
 const prisma = require("../prisma/prismaConfig");
 
 const validateInput = (data) => {
-	for (let val of data) {
-		if (!val) return false;
+	for (let val in data) {
+		if (!data[val]) return false;
 	}
 	return true;
 };
