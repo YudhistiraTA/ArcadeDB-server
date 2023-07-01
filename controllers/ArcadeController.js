@@ -1,5 +1,5 @@
 const haversineDistance = require("../helpers/haversineDistance");
-const { Arcade } = require("../models");
+const  Arcade  = require("../models/Arcade");
 
 module.exports = class ArcadeController {
 	static async mainPage(req, res, next) {
