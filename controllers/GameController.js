@@ -1,4 +1,4 @@
-const { Game } = require("../models/games");
+const { Game } = require("../models");
 
 module.exports = class gameController {
   static async findAllGame(req, res, next) {
