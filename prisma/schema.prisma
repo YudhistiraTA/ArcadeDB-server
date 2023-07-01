@@ -19,9 +19,9 @@ model Arcade {
   name        String
   lat         Float
   lng         Float
-  rating      Int
-  ratingCount Int
-  Brand       Brand        @relation(fields: [BrandId], references: [id])
+  rating      Int?         @default(0)
+  ratingCount Int?         @default(0)
+  Brand       Brand?       @relation(fields: [BrandId], references: [id])
   BrandId     Int
   ArcadeGame  ArcadeGame[]
   Bookmark    Bookmark[]
@@ -37,7 +37,7 @@ model Game {
 
 model ArcadeGame {
   id          Int    @id @default(autoincrement())
-  reportCount Int
+  reportCount Int    @default(0)
   Arcade      Arcade @relation(fields: [ArcadeId], references: [id])
   ArcadeId    Int
   Game        Game   @relation(fields: [GameId], references: [id])

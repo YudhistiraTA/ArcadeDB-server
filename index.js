@@ -6,7 +6,7 @@ const router = require("./router");
 const errorHandling = require("./middlewares/errorHandling");
 const { registerSuccess } = require("./helpers/nodemailer");
 const cron = require("node-cron");
-const { User } = require("./models");
+const User = require("./models/User");
 
 app.use(cors());
 app.use(express.json());

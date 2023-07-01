@@ -1,5 +1,5 @@
 const haversineDistance = require("../helpers/haversineDistance");
-const { Arcade } = require("../models");
+const Arcade = require("../models/Arcade");
 
 module.exports = class ArcadeController {
 	static async mainPage(req, res, next) {
@@ -29,7 +29,7 @@ module.exports = class ArcadeController {
 	}
 	static async detailPage(req, res, next) {
 		try {
-			const {id} = req.params;
+			const { id } = req.params;
 			const arcade = await Arcade.findDetail(id);
 			res.status(200).json(arcade);
 		} catch (error) {
@@ -38,7 +38,15 @@ module.exports = class ArcadeController {
 	}
 	static async createArcade(req, res, next) {
 		try {
-			const {name, lat, lng, logo, games} = req.body;
+			const { name, lat, lng, BrandId, games } = req.body;
+			const status = await Arcade.createArcade({
+				name,
+				lat,
+				lng,
+				BrandId,
+				games
+			});
+			res.status(201).json(status);
 		} catch (error) {
 			next(error);
 		}
