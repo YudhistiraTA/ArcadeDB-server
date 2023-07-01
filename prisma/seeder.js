@@ -18,6 +18,7 @@ async function main() {
 			lat: -6.3053252,
 			lng: 106.6435146,
 			rating: 0,
+			ratingCount: 0,
 			Brand: {
 				create: {
 					name: "Timezone",

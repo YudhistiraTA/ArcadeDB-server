@@ -15,16 +15,17 @@ model Brand {
 }
 
 model Arcade {
-  id         Int          @id @default(autoincrement())
-  name       String
-  lat        Float
-  lng        Float
-  rating     Int
-  Brand      Brand        @relation(fields: [BrandId], references: [id])
-  BrandId    Int
-  ArcadeGame ArcadeGame[]
-  Bookmark   Bookmark[]
-  Session    Session[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  lat         Float
+  lng         Float
+  rating      Int
+  ratingCount Int
+  Brand       Brand        @relation(fields: [BrandId], references: [id])
+  BrandId     Int
+  ArcadeGame  ArcadeGame[]
+  Bookmark    Bookmark[]
+  Session     Session[]
 }
 
 model Game {
@@ -66,9 +67,9 @@ model Bookmark {
 }
 
 model Session {
-  id       Int    @id @default(autoincrement())
-  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
-  User     User   @relation(fields: [UserId], references: [id])
+  id       Int      @id @default(autoincrement())
+  Arcade   Arcade   @relation(fields: [ArcadeId], references: [id])
+  User     User     @relation(fields: [UserId], references: [id])
   date     DateTime
   ArcadeId Int
   UserId   Int
