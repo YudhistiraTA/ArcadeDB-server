@@ -13,8 +13,8 @@ CREATE TABLE `Arcade` (
     `name` VARCHAR(191) NOT NULL,
     `lat` DOUBLE NOT NULL,
     `lng` DOUBLE NOT NULL,
-    `rating` INTEGER NOT NULL,
-    `ratingCount` INTEGER NOT NULL,
+    `rating` INTEGER NULL DEFAULT 0,
+    `ratingCount` INTEGER NULL DEFAULT 0,
     `BrandId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
@@ -32,7 +32,7 @@ CREATE TABLE `Game` (
 -- CreateTable
 CREATE TABLE `ArcadeGame` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `reportCount` INTEGER NOT NULL,
+    `reportCount` INTEGER NOT NULL DEFAULT 0,
     `ArcadeId` INTEGER NOT NULL,
     `GameId` INTEGER NOT NULL,
 

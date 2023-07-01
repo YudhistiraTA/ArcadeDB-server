@@ -1,13 +1,20 @@
-const { Game } = require("../models");
+const Game = require("../models/Game");
 
 module.exports = class GameController {
-  static async findAllGame(req, res, next) {
-    try {
-      const data = await Game.findAll();
-      res.status(200).json(data);
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  }
+	static async findAll(req, res, next) {
+		try {
+			const games = await Game.findAll();
+			res.status(200).json(games);
+		} catch (error) {
+			next(error);
+		}
+	}
+	static async findBrand(req, res, next) {
+		try {
+            const brands = await Game.findBrand();
+            res.status(200).json(brands);
+		} catch (error) {
+			next(error);
+		}
+	}
 };

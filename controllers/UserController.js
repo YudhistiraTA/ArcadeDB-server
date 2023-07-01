@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const User = require("../models/User");
 const bcrypt = require("bcrypt");
 module.exports = class UserController {
 	static async findAll(req, res, next) {
@@ -6,6 +6,7 @@ module.exports = class UserController {
 			const data = await User.findAll();
 			res.status(200).json(data);
 		} catch (error) {
+			console.log(error);
 			next(error);
 		}
 	}
@@ -31,10 +32,18 @@ module.exports = class UserController {
 		try {
 			const { email, password } = req.body;
 			const data = await User.findOne({ where: { email } });
-            if (!data) throw {name: "invalidLogin", message: "Invalid email / password"}
+			if (!data)
+				throw {
+					name: "invalidLogin",
+					message: "Invalid email / password"
+				};
 			const valid = bcrypt.compareSync(password, data.password);
-            if (!valid) throw {name: "invalidLogin", message: "Invalid email / password"}
-            res.status(200).send("success");
+			if (!valid)
+				throw {
+					name: "invalidLogin",
+					message: "Invalid email / password"
+				};
+			res.status(200).send("success");
 		} catch (error) {
 			next(error);
 		}
