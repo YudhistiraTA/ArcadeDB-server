@@ -10,4 +10,13 @@ module.exports = class Game {
             throw error;
         }
     }
+    static async findBrand() {
+        try {
+            const brands = await prisma.brand.findMany();
+            return brands;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 }

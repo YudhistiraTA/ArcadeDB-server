@@ -9,4 +9,12 @@ module.exports = class GameController {
 			next(error);
 		}
 	}
+	static async findBrand(req, res, next) {
+		try {
+            const brands = await Game.findBrand();
+            res.status(200).json(brands);
+		} catch (error) {
+			next(error);
+		}
+	}
 };
