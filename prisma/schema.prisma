@@ -1,42 +1,47 @@
 generator client {
   provider = "prisma-client-js"
-} 
+}
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model Brand {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   imageUrl String
-  Arcade Arcade[]
+  Arcade   Arcade[]
 }
+
 model Arcade {
-  id         Int          @id @default(autoincrement())
-  name       String
-  location   String
-  rating     Int
-  Brand      Brand @relation(fields: [BrandId],references: [id])
-  BrandId   Int
-  ArcadeGame ArcadeGame[]
-  Bookmark   Bookmark[]
-  Session    Session[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  lat         Float
+  lng         Float
+  rating      Int
+  ratingCount Int
+  Brand       Brand        @relation(fields: [BrandId], references: [id])
+  BrandId     Int
+  ArcadeGame  ArcadeGame[]
+  Bookmark    Bookmark[]
+  Session     Session[]
 }
 
 model Game {
   id         Int          @id @default(autoincrement())
   name       String
-  brand      String
+  logoUrl    String
   ArcadeGame ArcadeGame[]
 }
 
 model ArcadeGame {
-  id       Int    @id @default(autoincrement())
-  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
-  ArcadeId Int
-  Game     Game   @relation(fields: [GameId], references: [id])
-  GameId   Int
+  id          Int    @id @default(autoincrement())
+  reportCount Int
+  Arcade      Arcade @relation(fields: [ArcadeId], references: [id])
+  ArcadeId    Int
+  Game        Game   @relation(fields: [GameId], references: [id])
+  GameId      Int
 }
 
 model User {
@@ -44,6 +49,7 @@ model User {
   email        String       @unique
   username     String
   password     String
+  premium      Boolean      @default(false)
   Bookmark     Bookmark[]
   Session      Session[]
   userSender   Inbox[]      @relation("UserSender")
@@ -51,8 +57,6 @@ model User {
   userFollowed UserFollow[] @relation("UserFollowed")
   userFollower UserFollow[] @relation("UserFollower")
 }
-
-
 
 model Bookmark {
   id       Int    @id @default(autoincrement())
@@ -63,10 +67,10 @@ model Bookmark {
 }
 
 model Session {
-  id       Int    @id @default(autoincrement())
-  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
-  User     User   @relation(fields: [UserId], references: [id])
-  date     Int
+  id       Int      @id @default(autoincrement())
+  Arcade   Arcade   @relation(fields: [ArcadeId], references: [id])
+  User     User     @relation(fields: [UserId], references: [id])
+  date     DateTime
   ArcadeId Int
   UserId   Int
 }
