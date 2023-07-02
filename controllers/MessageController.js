@@ -1,4 +1,4 @@
-const admin = require("../firebase_sdk");
+const admin = require("../firebase_config/firebase_sdk");
 
 module.exports = class MessageController {
 	static async messageSend(req, res, next) {
