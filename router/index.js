@@ -3,6 +3,7 @@ const UserController = require("../controllers/UserController");
 const ArcadeController = require("../controllers/ArcadeController");
 const { authentication } = require("../middlewares/authentication");
 const GameController = require("../controllers/GameController");
+const MessageController = require("../controllers/MessageController");
 const router = express.Router();
 
 router.get("/users", UserController.findAll);
@@ -15,8 +16,8 @@ router.get("/games", GameController.findAll);
 router.get("/brands", GameController.findBrand);
 router.post("/arcade", ArcadeController.createArcade);
 
-router.use(authentication)
-router.get('/midtrans',UserController.transaction)
-
+router.use(authentication);
+router.get("/midtrans", UserController.transaction);
+router.post("/sendMessage", MessageController.messageSend);
 
 module.exports = router;
