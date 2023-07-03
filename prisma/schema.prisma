@@ -15,17 +15,18 @@ model Brand {
 }
 
 model Arcade {
-  id          Int          @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   name        String
   lat         Float
   lng         Float
-  rating      Int?         @default(0)
-  ratingCount Int?         @default(0)
-  Brand       Brand?       @relation(fields: [BrandId], references: [id], onDelete: Cascade)
+  rating      Int?          @default(0)
+  ratingCount Int?          @default(0)
+  Brand       Brand?        @relation(fields: [BrandId], references: [id], onDelete: Cascade)
   BrandId     Int
   ArcadeGame  ArcadeGame[]
   Bookmark    Bookmark[]
   Session     Session[]
+  UserRatings UserRatings[]
 }
 
 model Game {
@@ -36,12 +37,13 @@ model Game {
 }
 
 model ArcadeGame {
-  id          Int    @id @default(autoincrement())
-  reportCount Int    @default(0)
-  Arcade      Arcade @relation(fields: [ArcadeId], references: [id], onDelete: Cascade)
+  id          Int          @id @default(autoincrement())
+  reportCount Int          @default(0)
+  Arcade      Arcade       @relation(fields: [ArcadeId], references: [id], onDelete: Cascade)
   ArcadeId    Int
-  Game        Game   @relation(fields: [GameId], references: [id], onDelete: Cascade)
+  Game        Game         @relation(fields: [GameId], references: [id], onDelete: Cascade)
   GameId      Int
+  UserReport  UserReport[]
 }
 
 model User {
@@ -59,6 +61,8 @@ model User {
   Session              Session[]
   userFollowed         UserFollow[]   @relation("UserFollowed")
   userFollower         UserFollow[]   @relation("UserFollower")
+  UserRatings          UserRatings[]
+  UserReport           UserReport[]
 }
 
 model Bookmark {
@@ -90,4 +94,20 @@ model ProfilePicture {
   id       Int    @id @default(autoincrement())
   imageUrl String
   User     User[]
+}
+
+model UserRatings {
+  id       Int    @id @default(autoincrement())
+  UserId   Int
+  ArcadeId Int
+  User     User   @relation(fields: [UserId], references: [id], onDelete: Cascade)
+  Arcade   Arcade @relation(fields: [ArcadeId], references: [id], onDelete: Cascade)
+}
+
+model UserReport {
+  id           Int        @id @default(autoincrement())
+  UserId       Int
+  ArcadeGameId Int
+  User         User       @relation(fields: [UserId], references: [id], onDelete: Cascade)
+  ArcadeGame   ArcadeGame @relation(fields: [ArcadeGameId], references: [id], onDelete: Cascade)
 }
