@@ -23,5 +23,6 @@ router.get("/midtrans", UserController.transaction);
 router.post("/sendMessage", MessageController.messageSend);
 router.get("/bookmarks", BookmarkController.findAll);
 router.post("/bookmarks/:id", BookmarkController.addBookmark);
+router.delete("/bookmarks/:id", BookmarkController.deleteBookmark);
 
 module.exports = router;

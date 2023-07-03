@@ -13,8 +13,8 @@ module.exports = class BookmarkController {
 	static async addBookmark(req, res, next) {
 		try {
 			const { id: ArcadeId } = req.params;
-			const { id, premium } = req.additionalData;
-			const data = await Bookmark.findAll(id);
+			const { id: UserId, premium } = req.additionalData;
+			const data = await Bookmark.findAll(UserId);
 			const foundBookmark = data.Bookmark.find(
 				(el) => el.Arcade.id === +ArcadeId
 			);
@@ -29,7 +29,17 @@ module.exports = class BookmarkController {
 					message: "Bookmark limit for free user is 10"
 				};
 			}
-			const status = await Bookmark.addBookmark(id, ArcadeId);
+			const status = await Bookmark.addBookmark(UserId, ArcadeId);
+			res.status(200).json(status);
+		} catch (error) {
+			next(error);
+		}
+	}
+	static async deleteBookmark(req, res, next) {
+		try {
+			const { id: UserId } = req.additionalData;
+			const { id: ArcadeId } = req.params;
+			const status = await Bookmark.deleteBookmark(+UserId, +ArcadeId);
 			res.status(200).json(status);
 		} catch (error) {
 			next(error);

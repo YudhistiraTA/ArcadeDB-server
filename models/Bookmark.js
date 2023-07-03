@@ -42,12 +42,10 @@ module.exports = class Bookmark {
 	}
 	static async deleteBookmark(UserId, ArcadeId) {
 		try {
-			const deleteStatus = await prisma.bookmark.delete({
+			const deleteStatus = await prisma.bookmark.deleteMany({
 				where: {
-					UserId_ArcadeId: {
-						UserId: UserId,
-						ArcadeId: ArcadeId
-					}
+					UserId,
+					ArcadeId
 				}
 			});
 			return deleteStatus;
