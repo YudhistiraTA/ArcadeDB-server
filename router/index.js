@@ -4,6 +4,7 @@ const ArcadeController = require("../controllers/ArcadeController");
 const { authentication } = require("../middlewares/authentication");
 const GameController = require("../controllers/GameController");
 const MessageController = require("../controllers/MessageController");
+const BookmarkController = require("../controllers/BookmarkController");
 const router = express.Router();
 
 router.get("/users", UserController.findAll);
@@ -20,5 +21,7 @@ router.post("/arcade", ArcadeController.createArcade);
 router.use(authentication);
 router.get("/midtrans", UserController.transaction);
 router.post("/sendMessage", MessageController.messageSend);
+router.get("/bookmarks", BookmarkController.findAll);
+router.post("/bookmarks/:id", BookmarkController.addBookmark);
 
 module.exports = router;

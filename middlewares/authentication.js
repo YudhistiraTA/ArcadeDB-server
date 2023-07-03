@@ -10,19 +10,19 @@ async function authentication(req,res,next){
         
        
         if(!access_token){
-            throw {name: "Unauthenticated"}
+            throw {name: "Unauthenticated", message: "Unauthenticated"}
         }
         const payload = verifyToken(access_token)
         let user = {}
         user = await User.findByPk(payload.id)
         if(!user){
-            throw {name: 'Unauthenticated'}
+            throw {name: 'Unauthenticated', message: "Unauthenticated"}
         }
 
         req.additionalData = {
             id : user.id ,
             username : user.username,
-            
+            premium: user.premium
         }
         next()
     } 

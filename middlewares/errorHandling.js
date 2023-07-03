@@ -7,7 +7,9 @@ module.exports = (error, req, res, next) => {
         case "invalidInput":
 			code = 400;
 			break;
+		case "premiumError":
         case "invalidLogin":
+		case "Unauthenticated":
             code = 401;
             break;
         case "notFound":
