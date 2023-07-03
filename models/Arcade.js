@@ -99,4 +99,90 @@ module.exports = class Arcade {
 			throw error;
 		}
 	}
+	static async createRating(UserId, ArcadeId, rating) {
+		try {
+			const foundRecord = await prisma.userRatings.findFirst({
+				where: { UserId, ArcadeId }
+			});
+
+			if (foundRecord)
+				throw {
+					name: "constraintError",
+					message: "You have already rated this arcade"
+				};
+			const arcade = await prisma.arcade.findUniqueOrThrow({
+				where: { id: ArcadeId }
+			});
+			if (!arcade)
+				throw { name: "notFound", message: "Arcade not found" };
+			await prisma.userRatings.create({
+				data: {
+					UserId,
+					ArcadeId
+				}
+			});
+			const newRating =
+				(arcade.rating * arcade.ratingCount + rating) /
+				(arcade.ratingCount + 1);
+			const updatedArcade = await prisma.arcade.update({
+				where: { id: ArcadeId },
+				data: {
+					rating: newRating,
+					ratingCount: {
+						increment: 1
+					}
+				}
+			});
+			return updatedArcade;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async createReport(UserId, ArcadeGameId) {
+		try {
+			const arcadeGame = await prisma.arcadeGame.findUniqueOrThrow({
+				where: { id: ArcadeGameId }
+			});
+			if (!arcadeGame)
+				throw { name: "notFound", message: "Invalid arcade game data" };
+			const foundRecord = await prisma.userReport.findFirst({
+				where: { UserId, ArcadeGameId }
+			});
+			if (foundRecord)
+				throw {
+					name: "constraintError",
+					message: "You have already reported this arcade game"
+				};
+			await prisma.userReport.create({
+				data: {
+					UserId,
+					ArcadeGameId
+				}
+			});
+			const updatedArcadeGame = await prisma.arcadeGame.update({
+				where: { id: ArcadeGameId },
+				data: {
+					reportCount: {
+						increment: 1
+					}
+				}
+			});
+			return updatedArcadeGame;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async deleteArcadeGame(id) {
+		try {
+			const deletedArcadeGame = await prisma.arcadeGame.delete({
+				where: { id }
+			});
+			return deletedArcadeGame;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 };
