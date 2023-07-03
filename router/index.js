@@ -20,7 +20,8 @@ router.get("/games", GameController.findAll);
 router.get("/games/:id", GameController.gameWithLocation);
 
 router.get("/brands", GameController.findBrand);
-router.post("/arcade", ArcadeController.createArcade);
+router.post("/arcades", ArcadeController.createArcade);
+router.get("/arcades", ArcadeController.findAll);
 
 router.use(authentication);
 router.post("/session/add/:id", ArcadeController.addSession);
