@@ -45,6 +45,7 @@ module.exports = class User {
 			const user = await prisma.user.findUnique({
 				where: { id },
 				select: {
+					id: true,
 					username: true,
 					followerCount: true,
 					followingCount: true,

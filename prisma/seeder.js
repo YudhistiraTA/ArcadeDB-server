@@ -70,7 +70,7 @@ async function main() {
 			Session: {
 				create: {
 					UserId: masterUser.id,
-					date: new Date()
+					date: new Date(Date.parse("2023-07-08"))
 				}
 			}
 		}
