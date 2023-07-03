@@ -47,6 +47,9 @@ CREATE TABLE `User` (
     `password` VARCHAR(191) NOT NULL,
     `premium` BOOLEAN NOT NULL DEFAULT false,
     `subscriptionDeadline` DATETIME(3) NULL,
+    `followerCount` INTEGER NOT NULL DEFAULT 0,
+    `followingCount` INTEGER NOT NULL DEFAULT 0,
+    `ProfilePictureId` INTEGER NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -77,8 +80,14 @@ CREATE TABLE `UserFollow` (
     `FollowedId` INTEGER NOT NULL,
     `FollowerId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `UserFollow_FollowedId_key`(`FollowedId`),
-    UNIQUE INDEX `UserFollow_FollowerId_key`(`FollowerId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ProfilePicture` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `imageUrl` VARCHAR(191) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -90,6 +99,9 @@ ALTER TABLE `ArcadeGame` ADD CONSTRAINT `ArcadeGame_ArcadeId_fkey` FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE `ArcadeGame` ADD CONSTRAINT `ArcadeGame_GameId_fkey` FOREIGN KEY (`GameId`) REFERENCES `Game`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `User` ADD CONSTRAINT `User_ProfilePictureId_fkey` FOREIGN KEY (`ProfilePictureId`) REFERENCES `ProfilePicture`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_UserId_fkey` FOREIGN KEY (`UserId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
