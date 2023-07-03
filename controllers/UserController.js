@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const prisma = require("../prisma/prismaConfig");
 const {generateToken} = require('../helpers/jwt')
 const midtransClient = require('midtrans-client');
+const ProfilePicture = require("../models/ProfilePictures");
 module.exports = class UserController {
 	static async findAll(req, res, next) {
 		try {
@@ -15,8 +16,8 @@ module.exports = class UserController {
 	}
 	static async create(req, res, next) {
 		try {
-			const { username, email, password } = req.body;
-			const status = await User.create({ username, email, password });
+			const { username, email, password, ProfilePictureId } = req.body;
+			const status = await User.create({ username, email, password, ProfilePictureId });
 			res.status(201).json({ messsage: "User registered" });
 		} catch (error) {
 			next(error);
@@ -83,6 +84,13 @@ module.exports = class UserController {
 			console.log(err)
 			next(err);
 		}
-		
+	}
+	static async findAllPfps(req, res, next) {
+		try {
+			const data = await ProfilePicture.findAll();
+			res.status(200).json(data);
+		} catch (error) {
+			next(error);
+		}
 	}
 };

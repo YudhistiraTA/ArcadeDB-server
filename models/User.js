@@ -30,7 +30,7 @@ module.exports = class User {
 	}
 	static async findOne(option) {
 		try {
-			const result = await prisma.user.findUnique(option)
+			const result = await prisma.user.findUnique(option);
 			return result;
 		} catch (error) {
 			console.log(error);
@@ -42,7 +42,38 @@ module.exports = class User {
 			id = +id;
 			if (!id)
 				throw { name: "invalidInput", message: "Invalid ID requested" };
-			const user = await prisma.user.findUnique({ where: { id } });
+			const user = await prisma.user.findUnique({
+				where: { id },
+				select: {
+					username: true,
+					followerCount: true,
+					followingCount: true,
+					premium: true,
+					Session: {
+						select: {
+							date: true,
+							Arcade: {
+								select: {
+									Brand: {
+										select: { name: true, imageUrl: true }
+									},
+									id: true,
+									name: true,
+									lat: true,
+									lng: true,
+									rating: true,
+									ratingCount: true
+								}
+							}
+						}
+					},
+					ProfilePicture: {
+						select: {
+							imageUrl: true
+						}
+					}
+				}
+			});
 			return exclude(user, ["password"]);
 		} catch (error) {
 			if (
