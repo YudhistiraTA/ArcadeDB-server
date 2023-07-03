@@ -85,4 +85,15 @@ module.exports = class ArcadeController {
 			next(error)
 		}
 	}
+	static async postReport(req, res, next) {
+		try {
+			const { id: ArcadeGameId } = req.params;
+			const { id: UserId } = req.additionalData;
+			const status = await Arcade.createReport(+UserId, +ArcadeGameId);
+			if (status.reportCount >= 5) await Arcade.deleteArcadeGame(+ArcadeGameId);
+			res.status(201).json(status);
+		} catch (error) {
+			next(error)
+		}
+	}
 };

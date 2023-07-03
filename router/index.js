@@ -5,7 +5,6 @@ const { authentication } = require("../middlewares/authentication");
 const GameController = require("../controllers/GameController");
 const MessageController = require("../controllers/MessageController");
 const BookmarkController = require("../controllers/BookmarkController");
-const User = require("../models/User");
 const router = express.Router();
 
 router.get("/users", UserController.findAll);
@@ -39,7 +38,7 @@ router.get("/inbox", MessageController.fetchInbox);
 router.get("/chat/:id", MessageController.fetchChat);
 
 router.post("/rate/:id", ArcadeController.castRating);
-router.post("/report/:id");
+router.post("/report/:id", ArcadeController.postReport);
 
 router.get("/bookmarks", BookmarkController.findAll);
 router.post("/bookmarks/:id", BookmarkController.addBookmark);
