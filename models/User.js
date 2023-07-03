@@ -200,4 +200,52 @@ module.exports = class User {
 			throw error;
 		}
 	}
+	static async followerList(FollowedId) {
+		try {
+			const data = await prisma.userFollow.findMany({
+				where: { FollowedId },
+				select: {
+					Follower: {
+						select: {
+							id: true,
+							username: true,
+							ProfilePicture: {
+								select: {
+									imageUrl: true
+								}
+							}
+						}
+					}
+				}
+			});
+			return data;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async followingList(FollowerId) {
+		try {
+			const data = await prisma.userFollow.findMany({
+				where: { FollowerId },
+				select: {
+					Followed: {
+						select: {
+							id: true,
+							username: true,
+							ProfilePicture: {
+								select: {
+									imageUrl: true
+								}
+							}
+						}
+					}
+				}
+			});
+			return data;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 };

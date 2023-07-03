@@ -31,6 +31,8 @@ router.get("/midtrans", UserController.transaction);
 
 router.post("/follow/:id", UserController.followUser);
 router.delete("/follow/:id", UserController.unfollowUser);
+router.get("/following", UserController.followedList);
+router.get("/follower", UserController.followerList);
 
 router.post("/sendMessage", MessageController.messageSend);
 router.get("/inbox", MessageController.fetchInbox);

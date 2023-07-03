@@ -125,4 +125,22 @@ module.exports = class UserController {
 			next(error);
 		}
 	}
+	static async followedList(req, res, next) {
+		try {
+			const { id: FollowerId } = req.additionalData;
+			const data = await User.followingList(FollowerId);
+			res.status(200).json(data);
+		} catch (error) {
+			next(error);
+		}
+	}
+	static async followerList(req, res, next) {
+		try {
+			const { id: FollowedId } = req.additionalData;
+			const data = await User.followerList(FollowedId);
+			res.status(200).json(data);
+		} catch (error) {
+			next(error);
+		}
+	}
 };
