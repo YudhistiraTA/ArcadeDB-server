@@ -29,6 +29,9 @@ router.post("/session/add/:id", ArcadeController.addSession);
 
 router.get("/midtrans", UserController.transaction);
 
+router.post("/follow/:id", UserController.followUser);
+router.delete("/follow/:id", UserController.unfollowUser);
+
 router.post("/sendMessage", MessageController.messageSend);
 router.get("/inbox", MessageController.fetchInbox);
 router.get("/chat/:id", MessageController.fetchChat);

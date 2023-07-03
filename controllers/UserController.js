@@ -107,7 +107,20 @@ module.exports = class UserController {
 	}
 	static async followUser(req, res, next) {
 		try {
-			const {id} = req.additionalData;
+			const { id: FollowerId } = req.additionalData;
+			const { id: FollowedId } = req.params;
+			const status = await User.createFollow(+FollowerId, +FollowedId);
+			res.status(201).json(status);
+		} catch (error) {
+			next(error);
+		}
+	}
+	static async unfollowUser(req, res, next) {
+		try {
+			const { id: FollowerId } = req.additionalData;
+			const { id: FollowedId } = req.params;
+			const status = await User.removeFollow(+FollowerId, +FollowedId);
+			res.status(201).json(status);
 		} catch (error) {
 			next(error);
 		}
