@@ -117,4 +117,135 @@ module.exports = class User {
 			throw error;
 		}
 	}
+	static async expireSub(id) {
+		try {
+			const status = await prisma.user.update({
+				where: { id },
+				data: { premium: false, subscriptionDeadline: null }
+			});
+			return status;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async createFollow(FollowerId, FollowedId) {
+		try {
+			if (FollowedId === FollowerId)
+				throw {
+					name: "invalidInput",
+					message: "Can't follow yourself"
+				};
+			const foundTarget = await prisma.user.findUniqueOrThrow({
+				where: { id: FollowedId },
+				select: { id: true }
+			});
+			const foundRecord = await prisma.userFollow.findFirst({
+				where: { FollowerId, FollowedId }
+			});
+			if (foundRecord)
+				throw {
+					name: "constraintError",
+					message: "You are already following this user"
+				};
+			const status = await prisma.userFollow.create({
+				data: {
+					FollowerId,
+					FollowedId
+				}
+			});
+			if (status) {
+				await prisma.user.update({
+					where: { id: FollowedId },
+					data: { followerCount: { increment: 1 } }
+				});
+				await prisma.user.update({
+					where: { id: FollowerId },
+					data: { followingCount: { increment: 1 } }
+				});
+			}
+			return status;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async removeFollow(FollowerId, FollowedId) {
+		try {
+			const foundRecord = await prisma.userFollow.findFirst({
+				where: { FollowerId, FollowedId }
+			});
+			if (!foundRecord)
+				throw {
+					name: "notFoundError",
+					message: "Follow record not found"
+				};
+			const status = await prisma.userFollow.delete({
+				where: { id: foundRecord.id }
+			});
+
+			if (status) {
+				await prisma.user.update({
+					where: { id: FollowedId },
+					data: { followerCount: { decrement: 1 } }
+				});
+				await prisma.user.update({
+					where: { id: FollowerId },
+					data: { followingCount: { decrement: 1 } }
+				});
+			}
+			return status;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async followerList(FollowedId) {
+		try {
+			const data = await prisma.userFollow.findMany({
+				where: { FollowedId },
+				select: {
+					Follower: {
+						select: {
+							id: true,
+							username: true,
+							ProfilePicture: {
+								select: {
+									imageUrl: true
+								}
+							}
+						}
+					}
+				}
+			});
+			return data;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async followingList(FollowerId) {
+		try {
+			const data = await prisma.userFollow.findMany({
+				where: { FollowerId },
+				select: {
+					Followed: {
+						select: {
+							id: true,
+							username: true,
+							ProfilePicture: {
+								select: {
+									imageUrl: true
+								}
+							}
+						}
+					}
+				}
+			});
+			return data;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 };

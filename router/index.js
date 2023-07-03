@@ -5,6 +5,7 @@ const { authentication } = require("../middlewares/authentication");
 const GameController = require("../controllers/GameController");
 const MessageController = require("../controllers/MessageController");
 const BookmarkController = require("../controllers/BookmarkController");
+const User = require("../models/User");
 const router = express.Router();
 
 router.get("/users", UserController.findAll);
@@ -27,6 +28,11 @@ router.use(authentication);
 router.post("/session/add/:id", ArcadeController.addSession);
 
 router.get("/midtrans", UserController.transaction);
+
+router.post("/follow/:id", UserController.followUser);
+router.delete("/follow/:id", UserController.unfollowUser);
+router.get("/following", UserController.followedList);
+router.get("/follower", UserController.followerList);
 
 router.post("/sendMessage", MessageController.messageSend);
 router.get("/inbox", MessageController.fetchInbox);

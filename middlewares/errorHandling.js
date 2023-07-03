@@ -4,17 +4,18 @@ module.exports = (error, req, res, next) => {
 		case "constraintError":
 		case "uniqueEmail":
 		case "emailFormat":
-        case "invalidInput":
+		case "invalidInput":
 			code = 400;
 			break;
 		case "premiumError":
-        case "invalidLogin":
+		case "invalidLogin":
 		case "Unauthenticated":
-            code = 401;
-            break;
-        case "notFound":
-            code = 404;
-            break;
+			code = 401;
+			break;
+		case "notFound":
+		case "NotFoundError":
+			code = 404;
+			break;
 		default:
 			code = 500;
 	}
