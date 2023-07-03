@@ -13,6 +13,7 @@ router.post("/users/login", UserController.login);
 router.get("/main", ArcadeController.mainPage);
 router.get("/detail/:id", ArcadeController.detailPage);
 router.get("/games", GameController.findAll);
+router.get("/games/:id", GameController.gameWithLocation);
 router.get("/brands", GameController.findBrand);
 router.post("/arcade", ArcadeController.createArcade);
 

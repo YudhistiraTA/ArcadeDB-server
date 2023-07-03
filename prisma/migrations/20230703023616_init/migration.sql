@@ -82,46 +82,29 @@ CREATE TABLE `UserFollow` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `Inbox` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `SenderId` INTEGER NOT NULL,
-    `ReceiverId` INTEGER NOT NULL,
-
-    UNIQUE INDEX `Inbox_SenderId_key`(`SenderId`),
-    UNIQUE INDEX `Inbox_ReceiverId_key`(`ReceiverId`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- AddForeignKey
+ALTER TABLE `Arcade` ADD CONSTRAINT `Arcade_BrandId_fkey` FOREIGN KEY (`BrandId`) REFERENCES `Brand`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Arcade` ADD CONSTRAINT `Arcade_BrandId_fkey` FOREIGN KEY (`BrandId`) REFERENCES `Brand`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArcadeGame` ADD CONSTRAINT `ArcadeGame_ArcadeId_fkey` FOREIGN KEY (`ArcadeId`) REFERENCES `Arcade`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArcadeGame` ADD CONSTRAINT `ArcadeGame_ArcadeId_fkey` FOREIGN KEY (`ArcadeId`) REFERENCES `Arcade`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ArcadeGame` ADD CONSTRAINT `ArcadeGame_GameId_fkey` FOREIGN KEY (`GameId`) REFERENCES `Game`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ArcadeGame` ADD CONSTRAINT `ArcadeGame_GameId_fkey` FOREIGN KEY (`GameId`) REFERENCES `Game`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_UserId_fkey` FOREIGN KEY (`UserId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_UserId_fkey` FOREIGN KEY (`UserId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_ArcadeId_fkey` FOREIGN KEY (`ArcadeId`) REFERENCES `Arcade`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Bookmark` ADD CONSTRAINT `Bookmark_ArcadeId_fkey` FOREIGN KEY (`ArcadeId`) REFERENCES `Arcade`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Session` ADD CONSTRAINT `Session_ArcadeId_fkey` FOREIGN KEY (`ArcadeId`) REFERENCES `Arcade`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Session` ADD CONSTRAINT `Session_ArcadeId_fkey` FOREIGN KEY (`ArcadeId`) REFERENCES `Arcade`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Session` ADD CONSTRAINT `Session_UserId_fkey` FOREIGN KEY (`UserId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Session` ADD CONSTRAINT `Session_UserId_fkey` FOREIGN KEY (`UserId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserFollow` ADD CONSTRAINT `UserFollow_FollowedId_fkey` FOREIGN KEY (`FollowedId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserFollow` ADD CONSTRAINT `UserFollow_FollowedId_fkey` FOREIGN KEY (`FollowedId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `UserFollow` ADD CONSTRAINT `UserFollow_FollowerId_fkey` FOREIGN KEY (`FollowerId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Inbox` ADD CONSTRAINT `Inbox_SenderId_fkey` FOREIGN KEY (`SenderId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Inbox` ADD CONSTRAINT `Inbox_ReceiverId_fkey` FOREIGN KEY (`ReceiverId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserFollow` ADD CONSTRAINT `UserFollow_FollowerId_fkey` FOREIGN KEY (`FollowerId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -17,4 +17,13 @@ module.exports = class GameController {
 			next(error);
 		}
 	}
+	static async gameWithLocation(req, res, next) {
+		try {
+			const { id } = req.params;
+			const game = await Game.findDetail(id);
+			res.status(200).json(game);
+		} catch (error) {
+			next(error);
+		}
+	}
 };
