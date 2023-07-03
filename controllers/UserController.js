@@ -105,4 +105,11 @@ module.exports = class UserController {
 			next(error);
 		}
 	}
+	static async followUser(req, res, next) {
+		try {
+			const {id} = req.additionalData;
+		} catch (error) {
+			next(error);
+		}
+	}
 };

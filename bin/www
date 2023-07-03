@@ -1,12 +1,12 @@
 require("dotenv").config();
 const app = require("../index");
-const { registerSuccess } = require("../helpers/nodemailer");
 const cron = require("node-cron");
 const User = require("../models/User");
+const { deadline } = require("../helpers/nodemailer");
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-	cron.schedule("0 0 1 * *", async () => {
+	cron.schedule("0 4 * * *", async () => {
 		try {
 			console.log("---------------------");
 			console.log("Running Cron Job");
@@ -22,11 +22,15 @@ app.listen(port, () => {
 					]
 				}
 			});
-			user.forEach((element) => {
-				registerSuccess(element.email);
-				console.log(element.email);
+			user.forEach(async (element) => {
+				if (
+					element.subscriptionDeadline &&
+					element.subscriptionDeadline < new Date()
+				) {
+					await User.expireSub(+element.id);
+					deadline(element.email, element.username);
+				}
 			});
-			//   console.log(user);
 		} catch (error) {
 			console.log(error);
 		}

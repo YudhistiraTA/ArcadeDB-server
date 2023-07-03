@@ -117,4 +117,13 @@ module.exports = class User {
 			throw error;
 		}
 	}
+	static async expireSub(id) {
+		try {
+			const status = await prisma.user.update({where: {id}, data: {premium: false, subscriptionDeadline: null}});
+			return status;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 };

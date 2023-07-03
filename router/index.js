@@ -5,6 +5,7 @@ const { authentication } = require("../middlewares/authentication");
 const GameController = require("../controllers/GameController");
 const MessageController = require("../controllers/MessageController");
 const BookmarkController = require("../controllers/BookmarkController");
+const User = require("../models/User");
 const router = express.Router();
 
 router.get("/users", UserController.findAll);
