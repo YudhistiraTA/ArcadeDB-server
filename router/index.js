@@ -38,6 +38,9 @@ router.post("/sendMessage", MessageController.messageSend);
 router.get("/inbox", MessageController.fetchInbox);
 router.get("/chat/:id", MessageController.fetchChat);
 
+router.post("/rate/:id", ArcadeController.castRating);
+router.post("/report/:id");
+
 router.get("/bookmarks", BookmarkController.findAll);
 router.post("/bookmarks/:id", BookmarkController.addBookmark);
 router.delete("/bookmarks/:id", BookmarkController.deleteBookmark);

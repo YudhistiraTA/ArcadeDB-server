@@ -44,7 +44,7 @@ module.exports = class ArcadeController {
 			const allArcades = await Arcade.findWithBrand();
 			res.status(200).json(allArcades);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	}
 	static async createArcade(req, res, next) {
@@ -66,12 +66,23 @@ module.exports = class ArcadeController {
 		try {
 			const { id: ArcadeId } = req.params;
 			const { id: UserId } = req.additionalData;
-			const { date:dateRaw } = req.body;
+			const { date: dateRaw } = req.body;
 			const date = new Date(Date.parse(dateRaw));
 			const status = await Session.create(+UserId, +ArcadeId, date);
 			res.status(201).json(status);
 		} catch (error) {
 			next(error);
+		}
+	}
+	static async castRating(req, res, next) {
+		try {
+			const { id: ArcadeId } = req.params;
+			const { id: UserId } = req.additionalData;
+			const { rating } = req.body;
+			const status = await Arcade.createRating(+UserId, +ArcadeId, +rating);
+			res.status(201).json(status);
+		} catch (error) {
+			next(error)
 		}
 	}
 };

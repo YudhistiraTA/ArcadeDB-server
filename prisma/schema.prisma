@@ -19,7 +19,7 @@ model Arcade {
   name        String
   lat         Float
   lng         Float
-  rating      Int?          @default(0)
+  rating      Float?          @default(0)
   ratingCount Int?          @default(0)
   Brand       Brand?        @relation(fields: [BrandId], references: [id], onDelete: Cascade)
   BrandId     Int

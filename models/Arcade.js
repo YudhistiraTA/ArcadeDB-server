@@ -99,4 +99,43 @@ module.exports = class Arcade {
 			throw error;
 		}
 	}
+	static async createRating(UserId, ArcadeId, rating) {
+		try {
+			const foundRecord = await prisma.userRatings.findFirst({
+				where: { UserId, ArcadeId }
+			});
+
+			if (foundRecord)
+				throw {
+					name: "constraintError",
+					message: "You have already rated this arcade"
+				};
+			const arcade = await prisma.arcade.findUniqueOrThrow({
+				where: { id: ArcadeId }
+			});
+			if (!arcade) throw { name: "notFound", message: "Arcade not found" };
+			await prisma.userRatings.create({
+				data: {
+					UserId,
+					ArcadeId
+				}
+			});
+			const newRating =
+				(arcade.rating * arcade.ratingCount + rating) /
+				(arcade.ratingCount + 1);
+			const updatedArcade = await prisma.arcade.update({
+				where: { id: ArcadeId },
+				data: {
+					rating: newRating,
+					ratingCount: {
+						increment: 1
+					}
+				}
+			});
+			return updatedArcade;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 };
