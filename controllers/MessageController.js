@@ -80,4 +80,32 @@ module.exports = class MessageController {
 			next(error);
 		}
 	}
+	static async fetchChat(req, res, next) {
+		try {
+			const { id: currentUserId } = req.additionalData;
+			const chatPartnerId = req.params.id;
+			const userMessagesRef = admin
+				.database()
+				.ref("user_messages/" + currentUserId);
+			userMessagesRef.once("value", function (snapshot) {
+				const allMessages = snapshot.val();
+				const chatMessages = {};
+				for (const messageId in allMessages) {
+					const message = allMessages[messageId];
+					if (
+						(message.senderId == currentUserId &&
+							message.receiverId == chatPartnerId) ||
+						(message.senderId == chatPartnerId &&
+							message.receiverId == currentUserId)
+					) {
+						chatMessages[messageId] = message;
+					}
+				}
+				res.status(200).json({ messages: chatMessages });
+			});
+		} catch (error) {
+			console.log(error);
+			next(error);
+		}
+	}
 };

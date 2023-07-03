@@ -29,6 +29,7 @@ router.get("/midtrans", UserController.transaction);
 
 router.post("/sendMessage", MessageController.messageSend);
 router.get("/inbox", MessageController.fetchInbox);
+router.get("/chat/:id", MessageController.fetchChat);
 
 router.get("/bookmarks", BookmarkController.findAll);
 router.post("/bookmarks/:id", BookmarkController.addBookmark);

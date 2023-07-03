@@ -14,12 +14,10 @@ async function authentication(req,res,next){
         }
         const payload = verifyToken(access_token)
         let user = {}
-        console.log(payload);
         user = await User.findByPk(payload.id)
         if(!user){
             throw {name: 'Unauthenticated', message: "Unauthenticated"}
         }
-        console.log(user);
         req.additionalData = {
             id : user.id ,
             username : user.username,
@@ -31,7 +29,5 @@ async function authentication(req,res,next){
         next(err)
     }
 }
-
-
 
 module.exports = {authentication}
