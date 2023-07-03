@@ -11,14 +11,19 @@ router.get("/users", UserController.findAll);
 router.get("/users/:id", UserController.findOne);
 router.post("/users/register", UserController.create);
 router.post("/users/login", UserController.login);
+router.get("/pfps", UserController.findAllPfps);
+
 router.get("/main", ArcadeController.mainPage);
 router.get("/detail/:id", ArcadeController.detailPage);
+
 router.get("/games", GameController.findAll);
 router.get("/games/:id", GameController.gameWithLocation);
+
 router.get("/brands", GameController.findBrand);
 router.post("/arcade", ArcadeController.createArcade);
 
 router.use(authentication);
+router.post("/session/add/:id", ArcadeController.addSession);
 router.get("/midtrans", UserController.transaction);
 router.post("/sendMessage", MessageController.messageSend);
 router.get("/bookmarks", BookmarkController.findAll);

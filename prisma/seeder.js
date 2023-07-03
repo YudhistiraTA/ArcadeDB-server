@@ -1,8 +1,16 @@
 const prisma = require("./prismaConfig");
 
 async function main() {
-	const masterUser = await prisma.user.create({
+	const defaultPFP = await prisma.profilePicture.create({
 		data: {
+			imageUrl:
+				"https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg"
+		}
+	});
+	const masterUser = await prisma.user.upsert({
+		where: { id: 1 },
+		update: {},
+		create: {
 			email: "master@mail.com",
 			username: "master",
 			password:
@@ -10,7 +18,8 @@ async function main() {
 			premium: true,
 			subscriptionDeadline: new Date(
 				new Date().setDate(new Date().getDate() + 30) // 30 days from now
-			)
+			),
+			ProfilePictureId: defaultPFP.id
 		}
 	});
 	const Aeon_BSD = await prisma.arcade.upsert({
@@ -61,7 +70,7 @@ async function main() {
 			Session: {
 				create: {
 					UserId: masterUser.id,
-					date: new Date()
+					date: new Date(Date.parse("2023-07-08"))
 				}
 			}
 		}
@@ -94,14 +103,56 @@ async function main() {
 		data: [
 			{
 				name: "Amazone",
-				imageUrl: "https://pbs.twimg.com/profile_images/960431492160618496/akedMKBR_400x400.jpg"
+				imageUrl:
+					"https://pbs.twimg.com/profile_images/960431492160618496/akedMKBR_400x400.jpg"
 			},
 			{
 				name: "Fun World",
-				imageUrl: "https://lsurecreation.files.wordpress.com/2018/01/funworld.jpg"
+				imageUrl:
+					"https://lsurecreation.files.wordpress.com/2018/01/funworld.jpg"
 			}
 		]
-	})
+	});
+	const profilePictures = await prisma.profilePicture.createMany({
+		data: [
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-PYLGWlDc-zsj1QcClkoDAPomNw4Ys0pwOCkxWk_k-Mr5pJAwgG-XC1Rg_wdEUSo3o8g&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbha2eklUf5Yi94wm9Why99zfgtD-NW10AUzAAFRePbVpNA9j955LVMYb1o3OUpVhayBw&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi5JLhnP6KfVUME31FMJYVF8TDf9-YQX_uI8mtEM3w3ShBd_inkcbehn7yci2YcgwEJoA&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1K-NBN0nxTOeWkvxCnxxw1Xp4tW-Yrz0iLvrTTCDBXSkMJH4koSmkIwr5zv4E8Blc_Uk&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqR_DUVPmdtQu7BBTqWkvS8cEo2BNCvgdTEdzgTeRYtwruGgTQZJqSbvEaoEH9j5WywzE&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5K5ap4mDHc9bu2Iu3j-mlgP5_os_n0j6j_VEpEsMV7VtnZNXkd7GLnBDZjJ5U-TWZAZk&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5XpeZ27JOGUXdIjhaAWqXPh1mPeQ0a4-FjjrTEZ4vi9Gfj2pCvhULkWdC3yu7WlOHNAo&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIg8OyjfOYxeE0DJQhbK5xNiAPLKKYct1q8-s3qq-VKF_yNg4nxN-XOcyx6_bjVCB7SAU&usqp=CAU"
+			},
+			{
+				imageUrl:
+					"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPySr4qESSPYOD5Lqct6Qtq59LV_hs49eIR20sqgB7fZQemD7MgP_mU_QzxUGoDAdDDY0&usqp=CAU"
+			}
+		]
+	});
 }
 main()
 	.then(async () => {

@@ -45,18 +45,20 @@ model ArcadeGame {
 }
 
 model User {
-  id                   Int          @id @default(autoincrement())
-  email                String       @unique
+  id                   Int            @id @default(autoincrement())
+  email                String         @unique
   username             String
   password             String
-  premium              Boolean      @default(false)
+  premium              Boolean        @default(false)
   subscriptionDeadline DateTime?
+  followerCount        Int            @default(0)
+  followingCount       Int            @default(0)
+  ProfilePictureId     Int
+  ProfilePicture       ProfilePicture @relation(fields: [ProfilePictureId], references: [id], onDelete: Cascade)
   Bookmark             Bookmark[]
   Session              Session[]
-  // userSender           Inbox[]      @relation("UserSender")
-  // userReciever         Inbox[]      @relation("UserReciever")
-  userFollowed         UserFollow[] @relation("UserFollowed")
-  userFollower         UserFollow[] @relation("UserFollower")
+  userFollowed         UserFollow[]   @relation("UserFollowed")
+  userFollower         UserFollow[]   @relation("UserFollower")
 }
 
 model Bookmark {
@@ -80,14 +82,12 @@ model UserFollow {
   id         Int  @id @default(autoincrement())
   Followed   User @relation("UserFollowed", fields: [FollowedId], references: [id], onDelete: Cascade)
   Follower   User @relation("UserFollower", fields: [FollowerId], references: [id], onDelete: Cascade)
-  FollowedId Int  @unique
-  FollowerId Int  @unique
+  FollowedId Int
+  FollowerId Int
 }
 
-// model Inbox {
-//   id         Int  @id @default(autoincrement())
-//   Sender     User @relation("UserSender", fields: [SenderId], references: [id])
-//   Receiver   User @relation("UserReciever", fields: [ReceiverId], references: [id])
-//   SenderId   Int  @unique
-//   ReceiverId Int  @unique
-// }
+model ProfilePicture {
+  id       Int    @id @default(autoincrement())
+  imageUrl String
+  User     User[]
+}

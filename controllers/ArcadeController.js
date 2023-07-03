@@ -1,5 +1,7 @@
+const dateGroup = require("../helpers/dateGroup");
 const haversineDistance = require("../helpers/haversineDistance");
 const Arcade = require("../models/Arcade");
+const Session = require("../models/Session");
 
 module.exports = class ArcadeController {
 	static async mainPage(req, res, next) {
@@ -31,6 +33,7 @@ module.exports = class ArcadeController {
 		try {
 			const { id } = req.params;
 			const arcade = await Arcade.findDetail(id);
+			arcade.Session = dateGroup(arcade.Session);
 			res.status(200).json(arcade);
 		} catch (error) {
 			next(error);
@@ -46,6 +49,18 @@ module.exports = class ArcadeController {
 				BrandId,
 				games
 			});
+			res.status(201).json(status);
+		} catch (error) {
+			next(error);
+		}
+	}
+	static async addSession(req, res, next) {
+		try {
+			const { id: ArcadeId } = req.params;
+			const { id: UserId } = req.additionalData;
+			const { date:dateRaw } = req.body;
+			const date = new Date(Date.parse(dateRaw));
+			const status = await Session.create(+UserId, +ArcadeId, date);
 			res.status(201).json(status);
 		} catch (error) {
 			next(error);
