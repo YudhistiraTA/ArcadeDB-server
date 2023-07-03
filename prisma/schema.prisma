@@ -21,7 +21,7 @@ model Arcade {
   lng         Float
   rating      Int?         @default(0)
   ratingCount Int?         @default(0)
-  Brand       Brand?       @relation(fields: [BrandId], references: [id])
+  Brand       Brand?       @relation(fields: [BrandId], references: [id], onDelete: Cascade)
   BrandId     Int
   ArcadeGame  ArcadeGame[]
   Bookmark    Bookmark[]
@@ -38,9 +38,9 @@ model Game {
 model ArcadeGame {
   id          Int    @id @default(autoincrement())
   reportCount Int    @default(0)
-  Arcade      Arcade @relation(fields: [ArcadeId], references: [id])
+  Arcade      Arcade @relation(fields: [ArcadeId], references: [id], onDelete: Cascade)
   ArcadeId    Int
-  Game        Game   @relation(fields: [GameId], references: [id])
+  Game        Game   @relation(fields: [GameId], references: [id], onDelete: Cascade)
   GameId      Int
 }
 
@@ -53,24 +53,24 @@ model User {
   subscriptionDeadline DateTime?
   Bookmark             Bookmark[]
   Session              Session[]
-  userSender           Inbox[]      @relation("UserSender")
-  userReciever         Inbox[]      @relation("UserReciever")
+  // userSender           Inbox[]      @relation("UserSender")
+  // userReciever         Inbox[]      @relation("UserReciever")
   userFollowed         UserFollow[] @relation("UserFollowed")
   userFollower         UserFollow[] @relation("UserFollower")
 }
 
 model Bookmark {
   id       Int    @id @default(autoincrement())
-  User     User   @relation(fields: [UserId], references: [id])
-  Arcade   Arcade @relation(fields: [ArcadeId], references: [id])
+  User     User   @relation(fields: [UserId], references: [id], onDelete: Cascade)
+  Arcade   Arcade @relation(fields: [ArcadeId], references: [id], onDelete: Cascade)
   UserId   Int
   ArcadeId Int
 }
 
 model Session {
   id       Int      @id @default(autoincrement())
-  Arcade   Arcade   @relation(fields: [ArcadeId], references: [id])
-  User     User     @relation(fields: [UserId], references: [id])
+  Arcade   Arcade   @relation(fields: [ArcadeId], references: [id], onDelete: Cascade)
+  User     User     @relation(fields: [UserId], references: [id], onDelete: Cascade)
   date     DateTime
   ArcadeId Int
   UserId   Int
@@ -78,16 +78,16 @@ model Session {
 
 model UserFollow {
   id         Int  @id @default(autoincrement())
-  Followed   User @relation("UserFollowed", fields: [FollowedId], references: [id])
-  Follower   User @relation("UserFollower", fields: [FollowerId], references: [id])
+  Followed   User @relation("UserFollowed", fields: [FollowedId], references: [id], onDelete: Cascade)
+  Follower   User @relation("UserFollower", fields: [FollowerId], references: [id], onDelete: Cascade)
   FollowedId Int  @unique
   FollowerId Int  @unique
 }
 
-model Inbox {
-  id         Int  @id @default(autoincrement())
-  Sender     User @relation("UserSender", fields: [SenderId], references: [id])
-  Receiver   User @relation("UserReciever", fields: [ReceiverId], references: [id])
-  SenderId   Int  @unique
-  ReceiverId Int  @unique
-}
+// model Inbox {
+//   id         Int  @id @default(autoincrement())
+//   Sender     User @relation("UserSender", fields: [SenderId], references: [id])
+//   Receiver   User @relation("UserReciever", fields: [ReceiverId], references: [id])
+//   SenderId   Int  @unique
+//   ReceiverId Int  @unique
+// }
