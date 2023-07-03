@@ -39,6 +39,14 @@ module.exports = class ArcadeController {
 			next(error);
 		}
 	}
+	static async findAll(req, res, next) {
+		try {
+			const allArcades = await Arcade.findWithBrand();
+			res.status(200).json(allArcades);
+		} catch (error) {
+			next(error)
+		}
+	}
 	static async createArcade(req, res, next) {
 		try {
 			const { name, lat, lng, BrandId, games } = req.body;
