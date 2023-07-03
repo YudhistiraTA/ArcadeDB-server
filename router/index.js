@@ -24,8 +24,13 @@ router.post("/arcade", ArcadeController.createArcade);
 
 router.use(authentication);
 router.post("/session/add/:id", ArcadeController.addSession);
+
 router.get("/midtrans", UserController.transaction);
+
 router.post("/sendMessage", MessageController.messageSend);
+router.get("/inbox", MessageController.fetchInbox);
+router.get("/chat/:id", MessageController.fetchChat);
+
 router.get("/bookmarks", BookmarkController.findAll);
 router.post("/bookmarks/:id", BookmarkController.addBookmark);
 router.delete("/bookmarks/:id", BookmarkController.deleteBookmark);

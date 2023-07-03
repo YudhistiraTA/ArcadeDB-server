@@ -18,7 +18,6 @@ async function authentication(req,res,next){
         if(!user){
             throw {name: 'Unauthenticated', message: "Unauthenticated"}
         }
-
         req.additionalData = {
             id : user.id ,
             username : user.username,
@@ -30,7 +29,5 @@ async function authentication(req,res,next){
         next(err)
     }
 }
-
-
 
 module.exports = {authentication}
