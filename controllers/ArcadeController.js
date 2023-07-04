@@ -41,7 +41,18 @@ module.exports = class ArcadeController {
 	}
 	static async findAll(req, res, next) {
 		try {
+			const userLat = parseFloat(req.query.lat);
+			const userLng = parseFloat(req.query.lng);
 			const allArcades = await Arcade.findWithBrand();
+			allArcades.forEach((arcade) => {
+				arcade.distance = haversineDistance(
+					arcade.lat,
+					arcade.lng,
+					userLat,
+					userLng
+				);
+			});
+			allArcades.sort((a, b) => a.distance - b.distance);
 			res.status(200).json(allArcades);
 		} catch (error) {
 			next(error);
