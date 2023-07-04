@@ -29,6 +29,7 @@ router.post("/session/add/:id", ArcadeController.addSession);
 router.get("/midtrans", UserController.transaction);
 router.patch("/midtrans/success", UserController.createSub);
 router.get("/profile", UserController.profile);
+router.patch("/profile/:id", UserController.editProfilePicture);
 
 router.post("/follow/:id", UserController.followUser);
 router.delete("/follow/:id", UserController.unfollowUser);

@@ -7,7 +7,8 @@ const ProfilePicture = require("../models/ProfilePictures");
 module.exports = class UserController {
 	static async findAll(req, res, next) {
 		try {
-			const data = await User.findAll();
+			const { search } = req.query;
+			const data = await User.findAll(search);
 			res.status(200).json(data);
 		} catch (error) {
 			console.log(error);
@@ -162,6 +163,22 @@ module.exports = class UserController {
 			const { id: FollowedId } = req.additionalData;
 			const data = await User.followerList(FollowedId);
 			res.status(200).json(data);
+		} catch (error) {
+			next(error);
+		}
+	}
+	static async editProfilePicture(req, res, next) {
+		try {
+			const { id: UserId, premium } = req.additionalData;
+			const { id: ProfilePictureId } = req.params;
+			if (!premium && +ProfilePictureId > 5)
+				throw {
+					name: "premiumError",
+					message: "free users can only use the first 5 options"
+				};
+			const foundPfp = await ProfilePicture.findByPk(+ProfilePictureId);
+			const status = await User.patchPfp(+UserId, +ProfilePictureId);
+			res.status(200).json(status);
 		} catch (error) {
 			next(error);
 		}

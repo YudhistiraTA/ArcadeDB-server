@@ -375,6 +375,113 @@ describe("Follow endpoints", function () {
 		expect(response.body).toHaveProperty("message", "No User found");
 	});
 });
+describe("GET /users", function () {
+	it("Success fetch 200", async function () {
+		const response = await request(app)
+			.get("/users")
+			.set("Accept", "application/json");
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(Array.isArray(response.body)).toBe(true);
+		response.body.forEach((user) => {
+			expect(user).toMatchObject({
+				id: expect.any(Number),
+				email: expect.any(String),
+				username: expect.any(String),
+				premium: expect.any(Boolean),
+				followerCount: expect.any(Number),
+				followingCount: expect.any(Number),
+				ProfilePictureId: expect.any(Number)
+			});
+
+			if (user.premium) {
+				expect(user.subscriptionDeadline).not.toBeNull();
+			} else {
+				expect(user.subscriptionDeadline).toBeNull();
+			}
+		});
+	});
+	it("Success search 200", async function () {
+		const response = await request(app)
+			.get("/users?search=ter")
+			.set("Accept", "application/json");
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(Array.isArray(response.body)).toBe(true);
+		response.body.forEach((user) => {
+			expect(user).toMatchObject({
+				id: expect.any(Number),
+				email: expect.any(String),
+				username: expect.any(String),
+				premium: expect.any(Boolean),
+				followerCount: expect.any(Number),
+				followingCount: expect.any(Number),
+				ProfilePictureId: expect.any(Number)
+			});
+
+			if (user.premium) {
+				expect(user.subscriptionDeadline).not.toBeNull();
+			} else {
+				expect(user.subscriptionDeadline).toBeNull();
+			}
+		});
+	});
+});
+describe("PATCH /profile/:id", function () {
+	it("Success patch 200", async function () {
+		const response = await request(app)
+			.patch("/profile/3")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toMatchObject({
+			id: expect.any(Number),
+			email: expect.any(String),
+			username: expect.any(String),
+			premium: expect.any(Boolean),
+			followerCount: expect.any(Number),
+			followingCount: expect.any(Number),
+			ProfilePictureId: expect.any(Number)
+		});
+
+		if (response.body.premium) {
+			expect(response.body.subscriptionDeadline).not.toBeNull();
+		} else {
+			expect(response.body.subscriptionDeadline).toBeNull();
+		}
+	});
+	it("Fail not found 200", async function () {
+		const response = await request(app)
+			.patch("/profile/300")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(404);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty(
+			"message",
+			"No ProfilePicture found"
+		);
+	});
+	it("Fail not found 200", async function () {
+		const response = await request(app)
+			.patch("/profile/6")
+			.set("Accept", "application/json")
+			.set(
+				"access_token",
+				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJEaWRpdEBtYWlsLmNvbSIsImlhdCI6MTY4ODQ2MTE2MH0.LItzsxJk8YEUtmjkz1TkzwdA_7W41YYWG5Gsj0aZl1g"
+			);
+		expect(response.status).toEqual(401);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty(
+			"message",
+			"free users can only use the first 5 options"
+		);
+	});
+});
 
 afterAll((done) => {
 	User.delete(test_user.id)
