@@ -79,11 +79,16 @@ module.exports = class UserController {
 		try {
 			const { id } = req.additionalData;
 			const findUser = await User.findByPk(+id);
-
+			if (findUser.premium)
+				throw {
+					name: "premiumError",
+					message: "You are already subscribed"
+				};
 			let snap = new midtransClient.Snap({
 				isProduction: false,
 				serverKey: "SB-Mid-server-_8c1DQYqomT2roIxrzfzMs68"
 			});
+			console.log(findUser);
 
 			let parameter = {
 				transaction_details: {
@@ -100,11 +105,19 @@ module.exports = class UserController {
 				}
 			};
 			const midtrans_token = await snap.createTransaction(parameter);
-			await User.createSub(+id);
 			res.status(201).json(midtrans_token);
 		} catch (err) {
 			console.log(err);
 			next(err);
+		}
+	}
+	static async createSub(req, res, next) {
+		try {
+			const { id } = req.additionalData;
+			await User.createSub(+id);
+			res.status(200).json({ message: "Subscription success" });
+		} catch (error) {
+			next(error);
 		}
 	}
 	static async findAllPfps(req, res, next) {

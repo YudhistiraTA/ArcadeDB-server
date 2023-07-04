@@ -56,6 +56,7 @@ module.exports = class User {
 				select: {
 					id: true,
 					username: true,
+					email: true,
 					followerCount: true,
 					followingCount: true,
 					premium: true,

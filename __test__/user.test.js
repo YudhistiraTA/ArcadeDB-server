@@ -199,7 +199,6 @@ describe("GET /pfps", function () {
 		expect(response.status).toEqual(200);
 		expect(response.body).toBeDefined();
 		expect(Array.isArray(response.body)).toBe(true);
-
 		response.body.forEach((item) => {
 			expect(item).toEqual({
 				id: expect.any(Number),
@@ -208,6 +207,7 @@ describe("GET /pfps", function () {
 		});
 	});
 });
+describe("GET")
 
 afterAll((done) => {
 	User.delete(test_user.id)
