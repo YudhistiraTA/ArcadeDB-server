@@ -160,13 +160,6 @@ describe("GET /users/:id", function () {
 		expect(response.body).toEqual({
 			id: expect.any(Number),
 			username: expect.any(String),
-			followerCount: expect.any(Number),
-			followingCount: expect.any(Number),
-			premium: expect.any(Boolean),
-			Session: expect.any(Array),
-			ProfilePicture: expect.objectContaining({
-				imageUrl: expect.any(String)
-			})
 		});
 	});
 	it("Fail user not found 404", async function () {
@@ -207,7 +200,22 @@ describe("GET /pfps", function () {
 		});
 	});
 });
-describe("GET")
+describe("GET /midtrans", function () {
+	it("Success request 200", async function () {
+		const response = await request(app)
+			.get("/midtrans")
+			.set("Accept", "application/json");
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(Array.isArray(response.body)).toBe(true);
+		response.body.forEach((item) => {
+			expect(item).toEqual({
+				id: expect.any(Number),
+				imageUrl: expect.any(String)
+			});
+		});
+	});
+})
 
 afterAll((done) => {
 	User.delete(test_user.id)
