@@ -25,7 +25,8 @@ module.exports = class UserController {
 				password,
 				ProfilePictureId
 			});
-			res.status(201).json({ messsage: "User registered" });
+			delete status.password;
+			res.status(201).json(status);
 		} catch (error) {
 			next(error);
 		}
@@ -65,7 +66,15 @@ module.exports = class UserController {
 			next(error);
 		}
 	}
-
+	static async profile(req, res, next) {
+		try {
+			const {id} = req.additionalData;
+			const data = await User.findByPk(id);
+			res.status(200).json(data);
+		} catch (error) {
+			next(error);
+		}
+	}
 	static async transaction(req, res, next) {
 		try {
 			const findUser = await User.findByPk(req.additionalData.id);

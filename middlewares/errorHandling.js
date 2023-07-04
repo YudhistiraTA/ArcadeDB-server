@@ -3,6 +3,7 @@ module.exports = (error, req, res, next) => {
 	switch (error.name) {
 		case "constraintError":
 		case "uniqueEmail":
+		case "uniqueUsername":
 		case "emailFormat":
 		case "invalidInput":
 			code = 400;

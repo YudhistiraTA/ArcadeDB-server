@@ -28,6 +28,15 @@ module.exports = class User {
 		const users = await prisma.user.findMany();
 		return users.map((user) => exclude(user, ["password"]));
 	}
+	static async delete(id) {
+		try {
+			const status = await prisma.user.delete({where: {id}});
+			return status;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 	static async findOne(option) {
 		try {
 			const result = await prisma.user.findUnique(option);
@@ -105,6 +114,16 @@ module.exports = class User {
 					name: "uniqueEmail",
 					message: "Email is already taken"
 				};
+			const usernameTaken = await prisma.user.findUnique({
+				where: {
+					username: data.username
+				}
+			});
+			if (usernameTaken)
+				throw {
+					name: "uniqueUsername",
+					message: "Username is already taken"
+				};
 			if (!validateEmail(data.email))
 				throw {
 					name: "emailFormat",
@@ -114,6 +133,7 @@ module.exports = class User {
 			const creationStatus = await prisma.user.create({ data });
 			return creationStatus;
 		} catch (error) {
+			console.log(error);
 			throw error;
 		}
 	}

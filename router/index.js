@@ -27,6 +27,7 @@ router.use(authentication);
 router.post("/session/add/:id", ArcadeController.addSession);
 
 router.get("/midtrans", UserController.transaction);
+router.get("/profile", UserController.profile);
 
 router.post("/follow/:id", UserController.followUser);
 router.delete("/follow/:id", UserController.unfollowUser);
