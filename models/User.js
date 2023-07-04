@@ -24,8 +24,17 @@ function exclude(user, keys) {
 }
 
 module.exports = class User {
-	static async findAll() {
-		const users = await prisma.user.findMany();
+	static async findAll(username) {
+		let users;
+		if (username) {
+			users = await prisma.user.findMany({
+				where: {
+					username: {
+						contains: username
+					}
+				}
+			});
+		} else users = await prisma.user.findMany();
 		return users.map((user) => exclude(user, ["password"]));
 	}
 	static async delete(id) {

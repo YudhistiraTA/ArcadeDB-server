@@ -3,6 +3,7 @@ const app = require("../index");
 const cron = require("node-cron");
 const User = require("../models/User");
 const { deadline } = require("../helpers/nodemailer");
+const Session = require("../models/Session");
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
@@ -29,6 +30,12 @@ app.listen(port, () => {
 				) {
 					await User.expireSub(+element.id);
 					deadline(element.email, element.username);
+				}
+			});
+			const session = await Session.findAll();
+			session.forEach(async (element) => {
+				if (element.date && element.date < new Date()) {
+					await Session.delete(+element.id);
 				}
 			});
 		} catch (error) {

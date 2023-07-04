@@ -7,7 +7,8 @@ const ProfilePicture = require("../models/ProfilePictures");
 module.exports = class UserController {
 	static async findAll(req, res, next) {
 		try {
-			const data = await User.findAll();
+			const { search } = req.query;
+			const data = await User.findAll(search);
 			res.status(200).json(data);
 		} catch (error) {
 			console.log(error);
