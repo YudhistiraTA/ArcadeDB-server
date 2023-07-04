@@ -160,6 +160,14 @@ describe("GET /users/:id", function () {
 		expect(response.body).toEqual({
 			id: expect.any(Number),
 			username: expect.any(String),
+			email: expect.any(String),
+			followerCount: expect.any(Number),
+			followingCount: expect.any(Number),
+			premium: expect.any(Boolean),
+			Session: expect.any(Array),
+			ProfilePicture: expect.objectContaining({
+				imageUrl: expect.any(String)
+			})
 		});
 	});
 	it("Fail user not found 404", async function () {
@@ -204,18 +212,169 @@ describe("GET /midtrans", function () {
 	it("Success request 200", async function () {
 		const response = await request(app)
 			.get("/midtrans")
-			.set("Accept", "application/json");
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(201);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toEqual({
+			token: expect.any(String),
+			redirect_url: expect.any(String)
+		});
+	});
+	it("Success payment 200", async function () {
+		const response = await request(app)
+			.patch("/midtrans/success")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		console.log(response.body);
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty("message", "Subscription success");
+	});
+	it("Fail already subscribed 401", async function () {
+		const response = await request(app)
+			.get("/midtrans")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(401);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty(
+			"message",
+			"You are already subscribed"
+		);
+	});
+});
+describe("GET /profile", function () {
+	it("Success request 200", async function () {
+		const response = await request(app)
+			.get("/profile")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toEqual({
+			id: expect.any(Number),
+			username: expect.any(String),
+			email: expect.any(String),
+			followerCount: expect.any(Number),
+			followingCount: expect.any(Number),
+			premium: expect.any(Boolean),
+			Session: expect.any(Array),
+			ProfilePicture: expect.objectContaining({
+				imageUrl: expect.any(String)
+			})
+		});
+	});
+	it("Fail unauthenticated 401", async function () {
+		const response = await request(app)
+			.get("/profile")
+			.set("Accept", "application/json")
+			.set("access_token", "wrong_token");
+		expect(response.status).toEqual(401);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty("message", "jwt malformed");
+	});
+});
+describe("Follow endpoints", function () {
+	it("Success POST /follow/:id 201", async function () {
+		const response = await request(app)
+			.post("/follow/1")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(201);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toEqual({
+			id: expect.any(Number),
+			FollowedId: expect.any(Number),
+			FollowerId: expect.any(Number)
+		});
+	});
+	it("Fail POST /follow/:id 400", async function () {
+		const response = await request(app)
+			.post("/follow/1")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(400);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty(
+			"message",
+			"You are already following this user"
+		);
+	});
+	it("Success GET /follower 200", async function () {
+		const response = await request(app)
+			.get("/follower")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Array);
+		expect(response.body).toHaveLength(0);
+	});
+	it("Success GET /following 200", async function () {
+		const response = await request(app)
+			.get("/following")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
 		expect(response.status).toEqual(200);
 		expect(response.body).toBeDefined();
 		expect(Array.isArray(response.body)).toBe(true);
 		response.body.forEach((item) => {
-			expect(item).toEqual({
-				id: expect.any(Number),
-				imageUrl: expect.any(String)
-			});
+			expect(item).toHaveProperty("Followed");
+			expect(item.Followed).toHaveProperty("id");
+			expect(typeof item.Followed.id).toBe("number");
+			expect(item.Followed).toHaveProperty("username");
+			expect(typeof item.Followed.username).toBe("string");
+			expect(item.Followed).toHaveProperty("ProfilePicture");
+			expect(item.Followed.ProfilePicture).toHaveProperty("imageUrl");
+			expect(typeof item.Followed.ProfilePicture.imageUrl).toBe("string");
 		});
 	});
-})
+	it("Success DELETE /follow/:id 201", async function () {
+		const response = await request(app)
+			.delete("/follow/1")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(201);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toEqual({
+			id: expect.any(Number),
+			FollowedId: expect.any(Number),
+			FollowerId: expect.any(Number)
+		});
+	});
+	it("Fail DELETE /follow/:id 404", async function () {
+		const response = await request(app)
+			.delete("/follow/100")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(404);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty(
+			"message",
+			"Follow record not found"
+		);
+	});
+	it("Fail POST /follow/:id 404", async function () {
+		const response = await request(app)
+			.post("/follow/100")
+			.set("Accept", "application/json")
+			.set("access_token", access_token);
+		expect(response.status).toEqual(404);
+		expect(response.body).toBeDefined();
+		expect(response.body).toBeInstanceOf(Object);
+		expect(response.body).toHaveProperty("message", "No User found");
+	});
+});
 
 afterAll((done) => {
 	User.delete(test_user.id)

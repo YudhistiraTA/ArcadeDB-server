@@ -93,7 +93,7 @@ module.exports = class Arcade {
 			const creationStatus = await prisma.arcadeGame.createMany({
 				data: arcadeGameData
 			});
-			return creationStatus;
+			return newArcade;
 		} catch (error) {
 			console.log(error);
 			throw error;
