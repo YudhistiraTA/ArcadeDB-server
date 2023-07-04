@@ -1,5 +1,6 @@
 module.exports = (error, req, res, next) => {
 	let code = 0;
+	console.log(error.name);
 	switch (error.name) {
 		case "constraintError":
 		case "uniqueEmail":
@@ -11,10 +12,12 @@ module.exports = (error, req, res, next) => {
 		case "premiumError":
 		case "invalidLogin":
 		case "Unauthenticated":
+		case "JsonWebTokenError":
 			code = 401;
 			break;
 		case "notFound":
 		case "NotFoundError":
+		case "notFoundError":
 			code = 404;
 			break;
 		default:
