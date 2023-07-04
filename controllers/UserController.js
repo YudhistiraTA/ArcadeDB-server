@@ -68,7 +68,7 @@ module.exports = class UserController {
 	}
 	static async profile(req, res, next) {
 		try {
-			const {id} = req.additionalData;
+			const { id } = req.additionalData;
 			const data = await User.findByPk(id);
 			res.status(200).json(data);
 		} catch (error) {
@@ -77,7 +77,8 @@ module.exports = class UserController {
 	}
 	static async transaction(req, res, next) {
 		try {
-			const findUser = await User.findByPk(req.additionalData.id);
+			const { id } = req.additionalData;
+			const findUser = await User.findByPk(+id);
 
 			let snap = new midtransClient.Snap({
 				isProduction: false,
@@ -89,7 +90,7 @@ module.exports = class UserController {
 					order_id:
 						"TRANSACTION_" +
 						Math.floor(1000000 + Math.random() * 9000000),
-					gross_amount: 200000
+					gross_amount: 50000
 				},
 				credit_card: {
 					secure: true
@@ -98,8 +99,8 @@ module.exports = class UserController {
 					email: findUser.email
 				}
 			};
-
 			const midtrans_token = await snap.createTransaction(parameter);
+			await User.createSub(+id);
 			res.status(201).json(midtrans_token);
 		} catch (err) {
 			console.log(err);
