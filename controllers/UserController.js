@@ -167,4 +167,20 @@ module.exports = class UserController {
 			next(error);
 		}
 	}
+	static async editProfilePicture(req, res, next) {
+		try {
+			const { id: UserId, premium } = req.additionalData;
+			const { id: ProfilePictureId } = req.params;
+			if (!premium && +ProfilePictureId > 5)
+				throw {
+					name: "premiumError",
+					message: "free users can only use the first 5 options"
+				};
+			const foundPfp = await ProfilePicture.findByPk(+ProfilePictureId);
+			const status = await User.patchPfp(+UserId, +ProfilePictureId);
+			res.status(200).json(status);
+		} catch (error) {
+			next(error);
+		}
+	}
 };

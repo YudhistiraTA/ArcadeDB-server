@@ -294,4 +294,12 @@ module.exports = class User {
 			throw error;
 		}
 	}
+	static async patchPfp(id, ProfilePictureId) {
+		const data = await prisma.user.update({
+			where: { id },
+			data: { ProfilePictureId }
+		});
+		delete data.password;
+		return data;
+	}
 };
