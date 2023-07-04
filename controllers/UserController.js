@@ -61,6 +61,8 @@ module.exports = class UserController {
 				email: data.email
 			});
 			res.status(200).json({
+				premium: data.premium,
+				id: data.id,
 				token
 			});
 		} catch (error) {
