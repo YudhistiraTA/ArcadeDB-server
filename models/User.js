@@ -30,7 +30,7 @@ module.exports = class User {
 	}
 	static async delete(id) {
 		try {
-			const status = await prisma.user.delete({where: {id}});
+			const status = await prisma.user.delete({ where: { id } });
 			return status;
 		} catch (error) {
 			console.log(error);
@@ -56,6 +56,7 @@ module.exports = class User {
 				select: {
 					id: true,
 					username: true,
+					email: true,
 					followerCount: true,
 					followingCount: true,
 					premium: true,
@@ -132,6 +133,22 @@ module.exports = class User {
 			data.password = bcrypt.hashSync(data.password, 10);
 			const creationStatus = await prisma.user.create({ data });
 			return creationStatus;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
+	static async createSub(id) {
+		try {
+			const status = await prisma.user.update({
+				where: { id },
+				data: {
+					premium: true,
+					subscriptionDeadline: new Date(
+						new Date().setDate(new Date().getDate() + 30)
+					)
+				}
+			});
 		} catch (error) {
 			console.log(error);
 			throw error;
