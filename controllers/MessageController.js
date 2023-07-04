@@ -1,10 +1,14 @@
 const admin = require("../firebase_config/firebase_sdk");
+const User = require("../models/User");
 
 module.exports = class MessageController {
 	static async messageSend(req, res, next) {
 		try {
 			const { id: senderId } = req.additionalData;
 			const { receiverId, message } = req.body;
+			const foundTarget = await User.findByPk(receiverId);
+			if (!foundTarget)
+				throw { name: "notFound", message: "Target user is not found" };
 			if (senderId == receiverId)
 				throw {
 					name: "invalidInput",
@@ -42,7 +46,7 @@ module.exports = class MessageController {
 				.messaging()
 				.send(messagePayload)
 				.then((response) => {
-					res.json({ message: "Message sent successfully." });
+					res.status(201).json({ message: "Message sent successfully." });
 				})
 				.catch((error) => {
 					console.error(error);
@@ -84,6 +88,9 @@ module.exports = class MessageController {
 		try {
 			const { id: currentUserId } = req.additionalData;
 			const chatPartnerId = req.params.id;
+			const foundTarget = await User.findByPk(chatPartnerId);
+			if (!foundTarget)
+				throw { name: "notFound", message: "Target user is not found" };
 			const userMessagesRef = admin
 				.database()
 				.ref("user_messages/" + currentUserId);
