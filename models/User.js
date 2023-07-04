@@ -38,22 +38,12 @@ module.exports = class User {
 		return users.map((user) => exclude(user, ["password"]));
 	}
 	static async delete(id) {
-		try {
-			const status = await prisma.user.delete({ where: { id } });
-			return status;
-		} catch (error) {
-			console.log(error);
-			throw error;
-		}
+		const status = await prisma.user.delete({ where: { id } });
+		return status;
 	}
 	static async findOne(option) {
-		try {
-			const result = await prisma.user.findUnique(option);
-			return result;
-		} catch (error) {
-			console.log(error);
-			throw error;
-		}
+		const result = await prisma.user.findUnique(option);
+		return result;
 	}
 	static async findByPk(id) {
 		try {

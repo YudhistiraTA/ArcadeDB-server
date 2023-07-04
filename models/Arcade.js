@@ -101,6 +101,11 @@ module.exports = class Arcade {
 	}
 	static async createRating(UserId, ArcadeId, rating) {
 		try {
+			if (rating < 0 || rating > 5)
+				throw {
+					name: "constraintError",
+					message: "Rating must be between 0 to 5"
+				};
 			const foundRecord = await prisma.userRatings.findFirst({
 				where: { UserId, ArcadeId }
 			});

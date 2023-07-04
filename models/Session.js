@@ -30,9 +30,6 @@ module.exports = class Session {
 			throw error;
 		}
 	}
-	static async findAll() {
-		return await prisma.session.findMany();
-	}
 	static async delete(id) {
 		return await prisma.session.delete({ where: { id } });
 	}

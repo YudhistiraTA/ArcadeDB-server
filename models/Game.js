@@ -2,22 +2,12 @@ const prisma = require("../prisma/prismaConfig");
 
 module.exports = class Game {
 	static async findAll() {
-		try {
-			const games = await prisma.game.findMany();
-			return games;
-		} catch (error) {
-			console.log(error);
-			throw error;
-		}
+		const games = await prisma.game.findMany();
+		return games;
 	}
 	static async findBrand() {
-		try {
-			const brands = await prisma.brand.findMany();
-			return brands;
-		} catch (error) {
-			console.log(error);
-			throw error;
-		}
+		const brands = await prisma.brand.findMany();
+		return brands;
 	}
 	static async findDetail(id) {
 		try {
@@ -30,16 +20,15 @@ module.exports = class Game {
 						select: {
 							reportCount: true,
 							Arcade: {
-                                include: {
-                                    Brand: true
-                                }
-                            }
+								include: {
+									Brand: true
+								}
+							}
 						}
 					}
 				}
 			});
-			if (!game)
-				throw { name: "notFound", message: "Game not found" };
+			if (!game) throw { name: "notFound", message: "Game not found" };
 			return game;
 		} catch (error) {
 			console.log(error);
