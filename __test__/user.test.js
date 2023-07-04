@@ -375,6 +375,58 @@ describe("Follow endpoints", function () {
 		expect(response.body).toHaveProperty("message", "No User found");
 	});
 });
+describe("GET /users", function () {
+	it("Success fetch 200", async function () {
+		const response = await request(app)
+			.get("/users")
+			.set("Accept", "application/json");
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(Array.isArray(response.body)).toBe(true);
+		response.body.forEach((user) => {
+			expect(user).toMatchObject({
+				id: expect.any(Number),
+				email: expect.any(String),
+				username: expect.any(String),
+				premium: expect.any(Boolean),
+				followerCount: expect.any(Number),
+				followingCount: expect.any(Number),
+				ProfilePictureId: expect.any(Number)
+			});
+
+			if (user.premium) {
+				expect(user.subscriptionDeadline).not.toBeNull();
+			} else {
+				expect(user.subscriptionDeadline).toBeNull();
+			}
+		});
+	});
+	it("Success search 200", async function () {
+		const response = await request(app)
+			.get("/users?search=ter")
+			.set("Accept", "application/json");
+		expect(response.status).toEqual(200);
+		expect(response.body).toBeDefined();
+		expect(Array.isArray(response.body)).toBe(true);
+		response.body.forEach((user) => {
+			expect(user).toMatchObject({
+				id: expect.any(Number),
+				email: expect.any(String),
+				username: expect.any(String),
+				premium: expect.any(Boolean),
+				followerCount: expect.any(Number),
+				followingCount: expect.any(Number),
+				ProfilePictureId: expect.any(Number)
+			});
+
+			if (user.premium) {
+				expect(user.subscriptionDeadline).not.toBeNull();
+			} else {
+				expect(user.subscriptionDeadline).toBeNull();
+			}
+		});
+	});
+});
 
 afterAll((done) => {
 	User.delete(test_user.id)
