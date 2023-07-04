@@ -185,4 +185,16 @@ module.exports = class Arcade {
 			throw error;
 		}
 	}
+
+	static async deleteArcade(id) {
+		try {
+			const deletedArcade = await prisma.arcade.delete({
+				where: { id }
+			});
+			return deletedArcade;
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 };
