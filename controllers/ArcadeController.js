@@ -44,15 +44,17 @@ module.exports = class ArcadeController {
 			const userLat = parseFloat(req.query.lat);
 			const userLng = parseFloat(req.query.lng);
 			const allArcades = await Arcade.findWithBrand();
-			allArcades.forEach((arcade) => {
-				arcade.distance = haversineDistance(
-					arcade.lat,
-					arcade.lng,
-					userLat,
-					userLng
-				);
-			});
-			allArcades.sort((a, b) => a.distance - b.distance);
+			if (userLat && userLng) {
+				allArcades.forEach((arcade) => {
+					arcade.distance = haversineDistance(
+						arcade.lat,
+						arcade.lng,
+						userLat,
+						userLng
+					);
+				});
+				allArcades.sort((a, b) => a.distance - b.distance);
+			}
 			res.status(200).json(allArcades);
 		} catch (error) {
 			next(error);
@@ -90,10 +92,14 @@ module.exports = class ArcadeController {
 			const { id: ArcadeId } = req.params;
 			const { id: UserId } = req.additionalData;
 			const { rating } = req.body;
-			const status = await Arcade.createRating(+UserId, +ArcadeId, +rating);
+			const status = await Arcade.createRating(
+				+UserId,
+				+ArcadeId,
+				+rating
+			);
 			res.status(201).json(status);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	}
 	static async postReport(req, res, next) {
@@ -101,10 +107,11 @@ module.exports = class ArcadeController {
 			const { id: ArcadeGameId } = req.params;
 			const { id: UserId } = req.additionalData;
 			const status = await Arcade.createReport(+UserId, +ArcadeGameId);
-			if (status.reportCount >= 5) await Arcade.deleteArcadeGame(+ArcadeGameId);
+			if (status.reportCount >= 5)
+				await Arcade.deleteArcadeGame(+ArcadeGameId);
 			res.status(201).json(status);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	}
 };
