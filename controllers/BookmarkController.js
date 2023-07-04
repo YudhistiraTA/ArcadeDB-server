@@ -30,7 +30,7 @@ module.exports = class BookmarkController {
 				};
 			}
 			const status = await Bookmark.addBookmark(UserId, ArcadeId);
-			res.status(200).json(status);
+			res.status(201).json(status);
 		} catch (error) {
 			next(error);
 		}
@@ -40,6 +40,11 @@ module.exports = class BookmarkController {
 			const { id: UserId } = req.additionalData;
 			const { id: ArcadeId } = req.params;
 			const status = await Bookmark.deleteBookmark(+UserId, +ArcadeId);
+			if (!status.count)
+				throw {
+					name: "notFound",
+					message: "Bookmark record not found"
+				};
 			res.status(200).json(status);
 		} catch (error) {
 			next(error);
