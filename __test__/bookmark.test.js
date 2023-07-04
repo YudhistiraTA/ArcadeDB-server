@@ -1,6 +1,5 @@
 const app = require("../index");
 const request = require("supertest");
-const User = require("../models/User");
 const access_token =
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJEaWRpdEBtYWlsLmNvbSIsImlhdCI6MTY4ODQ2MTE2MH0.LItzsxJk8YEUtmjkz1TkzwdA_7W41YYWG5Gsj0aZl1g";
 
