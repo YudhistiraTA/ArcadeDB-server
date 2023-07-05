@@ -8,7 +8,20 @@ module.exports = class Bookmark {
 				select: {
 					Bookmark: {
 						select: {
-							Arcade: true
+							Arcade: {
+								select: {
+									id: true,
+									name: true,
+									lat: true,
+									lng: true,
+									rating: true,
+									Brand: {
+										select: {
+											imageUrl: true
+										}
+									}
+								}
+							}
 						}
 					}
 				}
