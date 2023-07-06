@@ -154,7 +154,10 @@ module.exports = class UserController {
 	static async followedList(req, res, next) {
 		try {
 			const { id: FollowerId } = req.additionalData;
-			const data = await User.followingList(FollowerId);
+			const { id: targetId } = req.params;
+			const data = await User.followingList(
+				targetId ? +targetId : +FollowerId
+			);
 			res.status(200).json(data);
 		} catch (error) {
 			next(error);
@@ -163,7 +166,10 @@ module.exports = class UserController {
 	static async followerList(req, res, next) {
 		try {
 			const { id: FollowedId } = req.additionalData;
-			const data = await User.followerList(FollowedId);
+			const { id: targetId } = req.params;
+			const data = await User.followerList(
+				targetId ? +targetId : +FollowedId
+			);
 			res.status(200).json(data);
 		} catch (error) {
 			next(error);
@@ -175,7 +181,9 @@ module.exports = class UserController {
 			const { id: userId } = req.additionalData;
 			const data = await User.followerList(+targetId);
 			res.status(200).json({
-				hasFollowed: data.find((el) => el.Follower.id == userId) ? true : false
+				hasFollowed: data.find((el) => el.Follower.id == userId)
+					? true
+					: false
 			});
 		} catch (error) {
 			next(error);

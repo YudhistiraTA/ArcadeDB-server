@@ -35,6 +35,8 @@ router.post("/follow/:id", UserController.followUser);
 router.delete("/follow/:id", UserController.unfollowUser);
 router.get("/following", UserController.followedList);
 router.get("/follower", UserController.followerList);
+router.get("/following/:id", UserController.followedList);
+router.get("/follower/:id", UserController.followerList);
 router.get("/hasfollowed/:id", UserController.hasFollowed);
 
 router.post("/sendMessage", MessageController.messageSend);
