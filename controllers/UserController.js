@@ -169,6 +169,18 @@ module.exports = class UserController {
 			next(error);
 		}
 	}
+	static async hasFollowed(req, res, next) {
+		try {
+			const { id: targetId } = req.params;
+			const { id: userId } = req.additionalData;
+			const data = await User.followerList(+targetId);
+			res.status(200).json({
+				hasFollowed: data.find((el) => el.Follower.id == userId) ? true : false
+			});
+		} catch (error) {
+			next(error);
+		}
+	}
 	static async editProfilePicture(req, res, next) {
 		try {
 			const { id: UserId, premium } = req.additionalData;
